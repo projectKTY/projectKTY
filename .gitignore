@@ -6,12 +6,12 @@
 !/.git*
 
 # Do not ignore current project's `.uproject`.
-!ArenaBattle/*.uproject
+!projectKTY/*.uproject
 
 # Do not ignore source, config and plugins dirs.
-!ArenaBattle/Source/**
-!ArenaBattle/Config/**
-!ArenaBattle/Plugins/**
+!projectKTY/Source/**
+!projectKTY/Config/**
+!projectKTY/Plugins/**
 
 # Only allow .uasset and .umap files from /Content dir.
 # They're tracked by git-lfs, don't forget to track other

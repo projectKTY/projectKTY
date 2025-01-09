@@ -49,6 +49,9 @@ class AprojectKTYCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SprintAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShootAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	float SprintSpeed = 500.0f;
 
@@ -73,6 +76,8 @@ protected:
 	
 	void Sprint();
 	void StopSprint();
+
+	void Shoot();
 
 protected:
 	// APawn interface

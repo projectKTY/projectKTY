@@ -96,6 +96,9 @@ void AprojectKTYCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		// Sprinting
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AprojectKTYCharacter::Sprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AprojectKTYCharacter::StopSprint);
+
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AprojectKTYCharacter::Shoot);
 	}
 	else
 	{
@@ -157,4 +160,9 @@ void AprojectKTYCharacter::StopSprint()
 		UE_LOG(LogTemp, Log, TEXT("Sprint Stop"));
 	}
 	GetCharacterMovement()->MaxWalkSpeed = bIsSprinting ? SprintSpeed : WalkSpeed;
+}
+
+void AprojectKTYCharacter::Shoot()
+{
+	Gun->PullTrigger();
 }

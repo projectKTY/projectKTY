@@ -55,6 +55,21 @@ AprojectKTYCharacter::AprojectKTYCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+float AprojectKTYCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	DamageToApply = FMath::Min(Health, DamageToApply);
+	Health -= DamageToApply;
+	UE_LOG(LogTemp, Warning, TEXT("Health left %f"), Health);
+
+	return DamageToApply;
+}
+
+bool AprojectKTYCharacter::IsDead() const
+{
+	return Health <= 0;
+}
+
 void AprojectKTYCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -73,6 +88,8 @@ void AprojectKTYCharacter::BeginPlay()
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	Gun->SetOwner(this);
+
+	Health = MaxHealth;
 }
 
 //////////////////////////////////////////////////////////////////////////

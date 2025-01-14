@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "CustomDataTables.h"
 #include "projectKTYCharacter.generated.h"
 
 class USpringArmComponent;
@@ -12,6 +13,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class AGun;
+class UCharacterStatComponent;
 struct FInputActionValue;
 
 
@@ -51,6 +53,10 @@ class AprojectKTYCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShootAction;
+
+	// Stat
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	class UCharacterStatComponent* StatComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	float SprintSpeed = 500.0f;
@@ -104,7 +110,7 @@ private:
 	AGun* Gun;
 
 	UPROPERTY(EditDefaultsOnly)
-	float MaxHealth = 100;
+	float MaxHealth = 1;
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;

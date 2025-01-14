@@ -76,6 +76,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	void Shoot();
+
 protected:
 
 	/** Called for movement input */
@@ -86,8 +88,6 @@ protected:
 	
 	void Sprint();
 	void StopSprint();
-
-	void Shoot();
 
 protected:
 	// APawn interface

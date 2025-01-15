@@ -20,11 +20,14 @@ AGun::AGun()
 	Mesh->SetupAttachment(Root);
 }
 
-void AGun::PullTrigger()
+void AGun::CreateMuzzleEffect()
 {
 	// 발사 파티클 생성
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+}
 
+void AGun::PullTrigger()
+{
 	// 뷰포인트 방향으로 발사되도록 설정
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
 	if (OwnerPawn == nullptr) return;

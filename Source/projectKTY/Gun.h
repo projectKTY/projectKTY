@@ -17,6 +17,8 @@ public:
 	
 	void PullTrigger();
 
+	void CreateMuzzleEffect();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -76,6 +76,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	virtual void SetDead();
+	void PlayDeadAnimation();
+	TObjectPtr<class UAnimMontage> DeadMontage;
 protected:
 
 	/** Called for movement input */
@@ -112,7 +115,20 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 1;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Meta = (AllowPrivateAccess = "true"))
 	float Health;
+
+protected:
+	UFUNCTION(Server, Reliable)
+	void ServerSetSprint(bool IsSprinting);
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetFire();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetFire();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetDie();
 };
 

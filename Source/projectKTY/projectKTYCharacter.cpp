@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Gun.h"
 #include "CharacterStatComponent.h"
+#include "Components/CapsuleComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -74,9 +75,13 @@ float AprojectKTYCharacter::TakeDamage(float DamageAmount, FDamageEvent const& D
 	Health -= DamageToApply;
 	UE_LOG(LogTemp, Warning, TEXT("Health left %f"), Health);
 
-	if (Health <= 0)
+	if (IsDead())
 	{
 		MulticastSetDie();
+
+		// client
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
 	return DamageToApply;

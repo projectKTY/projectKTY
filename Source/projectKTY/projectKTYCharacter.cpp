@@ -56,6 +56,13 @@ AprojectKTYCharacter::AprojectKTYCharacter()
 	StatComponent = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("StatComponent"));
 	// UE_LOG(LogTemp, Warning, TEXT("Player Character Initial Level 1 Attack: %d"), StatComponent->GetStatData(1)->Attack);
 
+	// Character Dead Montage
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Script/Engine.AnimMontage'/Game/Characters/AM_Dead.AM_Dead'"));
+	if (DeadMontageRef.Object)
+	{
+		DeadMontage = DeadMontageRef.Object;
+	}
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -67,12 +74,34 @@ float AprojectKTYCharacter::TakeDamage(float DamageAmount, FDamageEvent const& D
 	Health -= DamageToApply;
 	UE_LOG(LogTemp, Warning, TEXT("Health left %f"), Health);
 
+	if (Health <= 0)
+	{
+		MulticastSetDie();
+	}
+
 	return DamageToApply;
 }
 
 bool AprojectKTYCharacter::IsDead() const
 {
 	return Health <= 0;
+}
+
+void AprojectKTYCharacter::SetDead()
+{
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	PlayDeadAnimation();
+	SetActorEnableCollision(false);
+}
+
+void AprojectKTYCharacter::PlayDeadAnimation()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance)
+	{
+		AnimInstance->StopAllMontages(0.0f);
+		AnimInstance->Montage_Play(DeadMontage);
+	}	
 }
 
 void AprojectKTYCharacter::BeginPlay()
@@ -167,25 +196,70 @@ void AprojectKTYCharacter::Look(const FInputActionValue& Value)
 
 void AprojectKTYCharacter::Sprint()
 {
-	if (bIsSprinting == false)
+	//if (bIsSprinting == false)
+	//{
+	//	bIsSprinting = true;
+	//	UE_LOG(LogTemp, Log, TEXT("Sprint Start"));
+	//}
+	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+
+	if (HasAuthority() == false)
 	{
-		bIsSprinting = true;
-		UE_LOG(LogTemp, Log, TEXT("Sprint Start"));
+		ServerSetSprint(true);
 	}
-	GetCharacterMovement()->MaxWalkSpeed = bIsSprinting ? SprintSpeed : WalkSpeed;
 }
 
 void AprojectKTYCharacter::StopSprint()
 {
-	if (bIsSprinting == true)
+	//if (bIsSprinting == true)
+	//{
+	//	bIsSprinting = false;
+	//	UE_LOG(LogTemp, Log, TEXT("Sprint Stop"));
+	//}
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	if (HasAuthority() == false)
 	{
-		bIsSprinting = false;
-		UE_LOG(LogTemp, Log, TEXT("Sprint Stop"));
+		ServerSetSprint(false);
 	}
-	GetCharacterMovement()->MaxWalkSpeed = bIsSprinting ? SprintSpeed : WalkSpeed;
+}
+
+void AprojectKTYCharacter::ServerSetSprint_Implementation(bool IsSprinting)
+{
+	if (IsSprinting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
 }
 
 void AprojectKTYCharacter::Shoot()
 {
-	Gun->PullTrigger();
+	//Gun->PullTrigger();	
+	ServerSetFire();
+}
+
+void AprojectKTYCharacter::MulticastSetFire_Implementation()
+{
+	if (Gun)
+	{
+		Gun->CreateMuzzleEffect();
+	}
+}
+
+void AprojectKTYCharacter::MulticastSetDie_Implementation()
+{
+	SetDead();
+}
+
+
+void AprojectKTYCharacter::ServerSetFire_Implementation()
+{
+	if (Gun)
+	{
+		Gun->PullTrigger();
+		MulticastSetFire();
+	}
 }

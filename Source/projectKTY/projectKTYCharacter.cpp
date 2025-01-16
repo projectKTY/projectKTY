@@ -81,13 +81,14 @@ float AprojectKTYCharacter::TakeDamage(float DamageAmount, FDamageEvent const& D
 		MulticastSetDie();
 
 		// client
-		DetachFromControllerPendingDestroy();
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		AprojectKTYGameMode* GameMode = GetWorld()->GetAuthGameMode<AprojectKTYGameMode>();
 		if (GameMode != nullptr)
 		{
 			GameMode->PawnKilled(this);
 		}
+
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
 	return DamageToApply;

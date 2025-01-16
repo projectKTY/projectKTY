@@ -13,6 +13,7 @@
 #include "Gun.h"
 #include "CharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "projectKTYGameMode.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -82,6 +83,11 @@ float AprojectKTYCharacter::TakeDamage(float DamageAmount, FDamageEvent const& D
 		// client
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		AprojectKTYGameMode* GameMode = GetWorld()->GetAuthGameMode<AprojectKTYGameMode>();
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
 	}
 
 	return DamageToApply;

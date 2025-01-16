@@ -13,3 +13,7 @@ AprojectKTYGameMode::AprojectKTYGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void AprojectKTYGameMode::PawnKilled(APawn* KilledPawn)
+{
+}

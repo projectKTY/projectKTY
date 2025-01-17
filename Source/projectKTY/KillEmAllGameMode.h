@@ -16,4 +16,7 @@ class PROJECTKTY_API AKillEmAllGameMode : public AprojectKTYGameMode
 	
 public:
 	virtual void PawnKilled(APawn* KilledPawn) override;
+
+private:
+	void EndGame(bool bIsPlayerWinner);
 };

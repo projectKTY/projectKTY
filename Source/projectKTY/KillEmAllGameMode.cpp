@@ -12,6 +12,4 @@ void AKillEmAllGameMode::PawnKilled(APawn* KilledPawn)
 	{
 		PlayerController->GameHasEnded(nullptr, false);
 	}
-
-
 }

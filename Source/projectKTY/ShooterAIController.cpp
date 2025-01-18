@@ -5,10 +5,22 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "projectKTYCharacter.h"
 
 void AShooterAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+}
+
+bool AShooterAIController::IsDead() const
+{
+	AprojectKTYCharacter* ControlledCharacter = Cast<AprojectKTYCharacter>(GetPawn());
+	if (ControlledCharacter != nullptr)
+	{
+		return ControlledCharacter->IsDead();
+	}
+
+	return true;
 }
 
 void AShooterAIController::BeginPlay()

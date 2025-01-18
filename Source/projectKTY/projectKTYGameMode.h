@@ -13,6 +13,8 @@ class AprojectKTYGameMode : public AGameModeBase
 
 public:
 	AprojectKTYGameMode();
+
+	virtual void PawnKilled(APawn* KilledPawn);
 };
 
 

@@ -26,6 +26,11 @@ void AGun::CreateMuzzleEffect()
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
 }
 
+void AGun::PlayMuzzleSound()
+{
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
+}
+
 void AGun::PullTrigger()
 {
 	FHitResult Hit;
@@ -36,7 +41,11 @@ void AGun::PullTrigger()
 	{
 		// DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
 		// UE_LOG(LogTemp, Warning, TEXT("%s Hit"), *Hit.GetActor()->GetName());
+		PlayMuzzleSound();
+
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, ShotDirection.Rotation());
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSound, Hit.Location);
+
 		AActor* HitActor = Hit.GetActor();
 		if (HitActor != nullptr)
 		{

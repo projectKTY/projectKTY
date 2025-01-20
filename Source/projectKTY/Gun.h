@@ -18,6 +18,7 @@ public:
 	void PullTrigger();
 
 	void CreateMuzzleEffect();
+	void PlayMuzzleSound();
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,8 +43,18 @@ private:
 	UParticleSystem* ImpactEffect;
 
 	UPROPERTY(EditAnywhere)
-	float MaxRange = 1000.0f;
+	USoundBase* MuzzleSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* ImpactSound;
+
+	UPROPERTY(EditAnywhere)
+	float MaxRange = 5000.0f;
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10.0f;
+
+	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+
+	AController* GetOwnerController() const;
 };

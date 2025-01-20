@@ -17,6 +17,9 @@ class PROJECTKTY_API AShooterPlayerController : public APlayerController
 public:
 	virtual void GameHasEnded(class AActor* EndGameFocus, bool bIsWinner) override;
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> LoseScreenClass;
@@ -25,7 +28,13 @@ private:
 	TSubclassOf<class UUserWidget> WinScreenClass;
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> HUDClass;
+
+	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.0f;
 
 	FTimerHandle RestartTimer;
+
+	UPROPERTY(EditAnywhere)
+	UUserWidget* HUD;
 };

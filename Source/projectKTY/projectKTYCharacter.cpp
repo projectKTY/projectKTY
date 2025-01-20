@@ -99,6 +99,11 @@ bool AprojectKTYCharacter::IsDead() const
 	return Health <= 0;
 }
 
+float AprojectKTYCharacter::GetHealthPercent() const
+{
+	return Health / MaxHealth;
+}
+
 void AprojectKTYCharacter::SetDead()
 {
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);

@@ -9,16 +9,21 @@
 /**
  * 
  */
+
+class UTPSInputManager;
+
 UCLASS()
 class PROJECTKTY_API AShooterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
 public:
+	AShooterPlayerController();
 	virtual void GameHasEnded(class AActor* EndGameFocus, bool bIsWinner) override;
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -37,4 +42,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UUserWidget* HUD;
+
+	UTPSInputManager* InputManager;
 };

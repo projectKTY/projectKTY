@@ -1,9 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ShooterPlayerController.h"
+#include "Player/ShooterPlayerController.h"
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
+#include "Player/PlayerCharacter.h"
+#include "System/TPSInputManager.h"
+
+AShooterPlayerController::AShooterPlayerController()
+{
+	InputManager = CreateDefaultSubobject<UTPSInputManager>(TEXT("InputManager"));
+}
 
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
@@ -34,9 +41,29 @@ void AShooterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	auto* ControlledCharacter = Cast<ATPSCharacter>(GetPawn());
+	if (InputManager && ControlledCharacter)
+	{
+		InputManager->Initialize(this, ControlledCharacter);
+	}
+
 	HUD = CreateWidget(this, HUDClass);
 	if (HUD != nullptr)
 	{
 		HUD->AddToViewport();
+	}
+}
+
+void AShooterPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	if (InputManager && InputComponent)
+	{
+		auto* EnhancedInputComp = Cast<UEnhancedInputComponent>(InputComponent);
+		if (EnhancedInputComp)
+		{
+			InputManager->BindInputActions(EnhancedInputComp);
+		}
 	}
 }

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "CustomDataTables.h"
 #include "projectKTYCharacter.generated.h"
 
 class USpringArmComponent;
@@ -85,6 +84,8 @@ public:
 	void PlayDeadAnimation();
 	TObjectPtr<class UAnimMontage> DeadMontage;
 
+	void SetDebugStatusWidget();
+
 protected:
 
 	/** Called for movement input */
@@ -112,6 +113,9 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGun> GunClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UWidgetComponent* DebugStatusWidget;
 
 	UPROPERTY()
 	AGun* Gun;

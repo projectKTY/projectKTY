@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KillEmAllGameMode.h"
+#include "GameMode/KillEmAllGameMode.h"
 #include "EngineUtils.h"
 #include "GameFramework/Controller.h"
-#include "ShooterAIController.h"
+#include "System/ShooterAIController.h"
 
 void AKillEmAllGameMode::PawnKilled(APawn* KilledPawn)
 {

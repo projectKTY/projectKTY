@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "CustomDataTables.h"
 #include "CharacterStatComponent.generated.h"
 
 
@@ -26,8 +25,13 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	int32 GetMaxHp() const { return Maxhp; }
-	int32 GetAttack() const { return Attack; }
+	UFUNCTION(BlueprintCallable) FString GetNameID() const { return NameID; }
+	UFUNCTION(BlueprintCallable) FString GetType() const { return Type; }
+	UFUNCTION(BlueprintCallable) int32 GetMaxHp() const { return Maxhp; }
+	UFUNCTION(BlueprintCallable) int32 GetAttack() const { return Attack; }
+	UFUNCTION(BlueprintCallable) int32 GetDefence() const { return Defence; }
+	UFUNCTION(BlueprintCallable) float GetSpeed() const { return Movespeed; }
+	UFUNCTION(BlueprintCallable) int32 GetExp() const { return Exp; }
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Stat", meta = (AllowPrivateAccess = true))

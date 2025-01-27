@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_Shoot.h"
+#include "BehaviorTree/BTTask_Shoot.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "projectKTYCharacter.h"
+#include "Character/projectKTYCharacter.h"
 
 
 UBTTask_Shoot::UBTTask_Shoot()

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_PlayerLocationIfSeen.h"
+#include "BehaviorTree/BTService_PlayerLocationIfSeen.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"

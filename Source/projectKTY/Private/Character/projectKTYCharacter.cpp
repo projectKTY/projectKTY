@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "projectKTYCharacter.h"
+#include "Character/projectKTYCharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -10,10 +10,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "Gun.h"
-#include "CharacterStatComponent.h"
+#include "Weapon/Gun.h"
+#include "Character/CharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "projectKTYGameMode.h"
+#include "GameMode/projectKTYGameMode.h"
+#include "Components/WidgetComponent.h"
+#include "Blueprint/UserWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -64,6 +66,8 @@ AprojectKTYCharacter::AprojectKTYCharacter()
 	{
 		DeadMontage = DeadMontageRef.Object;
 	}
+
+	SetDebugStatusWidget();
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -119,6 +123,19 @@ void AprojectKTYCharacter::PlayDeadAnimation()
 		AnimInstance->StopAllMontages(0.0f);
 		AnimInstance->Montage_Play(DeadMontage);
 	}	
+}
+
+void AprojectKTYCharacter::SetDebugStatusWidget()
+{
+	DebugStatusWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("DebugStatusWidget"));
+	DebugStatusWidget->SetupAttachment(GetMesh());
+	DebugStatusWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UUserWidget> DEBUG_STAT_UI(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WBP_STATUS_DEBUG.WBP_STATUS_DEBUG_C'"));
+	if (DEBUG_STAT_UI.Succeeded())
+	{
+		DebugStatusWidget->SetWidgetClass(DEBUG_STAT_UI.Class);
+		DebugStatusWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 300));
+	}
 }
 
 void AprojectKTYCharacter::BeginPlay()

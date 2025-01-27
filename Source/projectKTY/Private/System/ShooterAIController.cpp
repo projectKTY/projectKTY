@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ShooterAIController.h"
+#include "System/ShooterAIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "projectKTYCharacter.h"
+#include "Character/projectKTYCharacter.h"
 
 void AShooterAIController::Tick(float DeltaSeconds)
 {

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterStatComponent.h"
-#include "MyGameInstance.h"
+#include "Character/CharacterStatComponent.h"
+#include "System/MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties

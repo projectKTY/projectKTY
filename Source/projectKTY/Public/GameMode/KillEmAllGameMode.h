@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "projectKTYGameMode.h"
+#include "GameMode/projectKTYGameMode.h"
 #include "KillEmAllGameMode.generated.h"
 
 /**

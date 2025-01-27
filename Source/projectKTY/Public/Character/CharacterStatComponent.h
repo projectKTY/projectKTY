@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "CustomDataTables.h"
 #include "CharacterStatComponent.generated.h"
 
 

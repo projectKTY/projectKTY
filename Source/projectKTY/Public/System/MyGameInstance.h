@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "CustomDataTables.h"
+#include "System/CustomDataTables.h"
 #include "MyGameInstance.generated.h"
 
 /**

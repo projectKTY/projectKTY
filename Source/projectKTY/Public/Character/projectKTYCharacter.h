@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "CustomDataTables.h"
 #include "projectKTYCharacter.generated.h"
 
 class USpringArmComponent;

@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "projectKTYCharacter.h"
+#include "Character/projectKTYCharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -10,10 +10,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "Gun.h"
-#include "CharacterStatComponent.h"
+#include "Weapon/Gun.h"
+#include "Character/CharacterStatComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "projectKTYGameMode.h"
+#include "GameMode/projectKTYGameMode.h"
 #include "Components/WidgetComponent.h"
 #include "Blueprint/UserWidget.h"
 

@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "projectKTYGameMode.h"
-#include "projectKTYCharacter.h"
+#include "GameMode/projectKTYGameMode.h"
+#include "Character/projectKTYCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AprojectKTYGameMode::AprojectKTYGameMode()

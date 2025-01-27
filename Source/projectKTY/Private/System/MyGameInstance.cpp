@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyGameInstance.h"
+#include "System/MyGameInstance.h"
 #include "Engine/DataTable.h"
 
 UMyGameInstance::UMyGameInstance()

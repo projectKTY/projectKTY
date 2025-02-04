@@ -5,6 +5,12 @@
 #include "EngineUtils.h"
 #include "GameFramework/Controller.h"
 #include "System/ShooterAIController.h"
+#include "Player/ShooterPlayerController.h"
+
+AKillEmAllGameMode::AKillEmAllGameMode()
+{
+	PlayerControllerClass = AShooterPlayerController::StaticClass();
+}
 
 void AKillEmAllGameMode::PawnKilled(APawn* KilledPawn)
 {

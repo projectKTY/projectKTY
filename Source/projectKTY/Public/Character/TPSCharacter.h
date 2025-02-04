@@ -20,7 +20,7 @@ class PROJECTKTY_API ATPSCharacter : public ACharacter
 
 protected:
 	// Stat
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	class UCharacterStatComponent* StatComponent;
 
 private:
@@ -35,6 +35,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	float WalkSpeed;
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Move")
+	bool bIsSprinting = false;
 
 public:
 	// Sets default values for this character's properties
@@ -52,19 +56,25 @@ public:
 	void PlayDeadAnimation();
 	TObjectPtr<class UAnimMontage> DeadMontage;
 
+	/** Called for movement input */
+	void Move(const FInputActionValue& Value);
+
+	/** Called for looking input */
+	void Look(const FInputActionValue& Value);
+
+	void Sprint();
+	void StopSprint();
+
 protected:
 	virtual void BeginPlay();
 
 	virtual void SetDefaultStatus();
 	virtual void SetDefaultCharacterSettings();
 
-	// UFUNCTION(NetMulticast, Reliable)
-	// void MulticastSetDie();
+protected:
+	UFUNCTION(Server, Reliable)
+	void ServerSetSprint(bool IsSprinting);
 
-public:
-	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetDie();
 };

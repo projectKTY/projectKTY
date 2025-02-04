@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "Components/ActorComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Character/TPSCharacter.h"
@@ -12,18 +12,29 @@
 /**
  * 
  */
-UCLASS()
-class PROJECTKTY_API UTPSInputManager : public UObject
+
+class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
+
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class PROJECTKTY_API UTPSInputManager : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:
+	UTPSInputManager();
 	void Initialize(class APlayerController* PlayerController, ATPSCharacter* ControlledCharacter);
 	void BindInputActions(class UEnhancedInputComponent* InputComponent);
 
 protected:
 	void OnMove(const FInputActionValue& Value);
 	void OnLook(const FInputActionValue& Value);
+	void OnJump();
+	void OnStopJumping();
+	void OnSprint();
+	void OnStopSprint();
+	void OnShoot();
 
 private:
 

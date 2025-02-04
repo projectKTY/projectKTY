@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Player/PlayerCharacter.h"
 #include "System/TPSInputManager.h"
+#include "Kismet/GameplayStatics.h"
 
 AShooterPlayerController::AShooterPlayerController()
 {
@@ -41,29 +42,9 @@ void AShooterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto* ControlledCharacter = Cast<ATPSCharacter>(GetPawn());
-	if (InputManager && ControlledCharacter)
-	{
-		InputManager->Initialize(this, ControlledCharacter);
-	}
-
 	HUD = CreateWidget(this, HUDClass);
 	if (HUD != nullptr)
 	{
 		HUD->AddToViewport();
-	}
-}
-
-void AShooterPlayerController::SetupInputComponent()
-{
-	Super::SetupInputComponent();
-
-	if (InputManager && InputComponent)
-	{
-		auto* EnhancedInputComp = Cast<UEnhancedInputComponent>(InputComponent);
-		if (EnhancedInputComp)
-		{
-			InputManager->BindInputActions(EnhancedInputComp);
-		}
 	}
 }

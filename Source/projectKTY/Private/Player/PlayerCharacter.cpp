@@ -27,6 +27,22 @@ void APlayerCharacter::OnShot()
 	}
 }
 
+void APlayerCharacter::OnZoom()
+{
+	if (PlayerCamera != nullptr)
+	{
+		PlayerCamera->ZoomIn();
+	}
+}
+
+void APlayerCharacter::ReleaseZoom()
+{
+	if (PlayerCamera != nullptr)
+	{
+		PlayerCamera->ZoomOut();
+	}
+}
+
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();

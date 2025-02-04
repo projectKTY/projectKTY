@@ -43,6 +43,12 @@ UTPSInputManager::UTPSInputManager()
 	{
 		ShootAction = IA_SHOT.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_AIMING(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Aiming.IA_Aiming'"));
+	if (IA_AIMING.Succeeded())
+	{
+		AimingAction = IA_AIMING.Object;
+	}
 }
 
 void UTPSInputManager::Initialize(APlayerController* PlayerController, ATPSCharacter* ControlledCharacter)
@@ -125,6 +131,10 @@ void UTPSInputManager::BindInputActions(UEnhancedInputComponent* InputComponent)
 
 	// Shooting
 	InputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &UTPSInputManager::OnShoot);
+
+	// Aiming
+	InputComponent->BindAction(AimingAction, ETriggerEvent::Started, this, &UTPSInputManager::OnAiming);
+	InputComponent->BindAction(AimingAction, ETriggerEvent::Completed, this, &UTPSInputManager::OnStopAiming);
 }
 
 void UTPSInputManager::OnMove(const FInputActionValue& Value)
@@ -183,5 +193,23 @@ void UTPSInputManager::OnShoot()
 		PlayerCharacter->OnShot();
 
 		UE_LOG(LogTemp, Warning, TEXT("Shoot Called"));
+	}
+}
+
+void UTPSInputManager::OnAiming()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->OnZoom();
+	}
+}
+
+void UTPSInputManager::OnStopAiming()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->ReleaseZoom();
 	}
 }

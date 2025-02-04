@@ -6,11 +6,11 @@
 
 void AEnemySoldierType::Attack_Shot()
 {
-	if (WeaponManager != nullptr)
+	/*if (WeaponManager != nullptr)
 	{
 		if (WeaponManager->HasGun())
 		{
 			WeaponManager->GunFire();
 		}
-	}
+	}*/
 }

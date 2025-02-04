@@ -35,6 +35,8 @@ protected:
 	void OnSprint();
 	void OnStopSprint();
 	void OnShoot();
+	void OnAiming();
+	void OnStopAiming();
 
 private:
 
@@ -61,4 +63,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShootAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AimingAction;
 };

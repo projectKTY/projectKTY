@@ -15,6 +15,8 @@ class PROJECTKTY_API AKillEmAllGameMode : public AprojectKTYGameMode
 	GENERATED_BODY()
 	
 public:
+	AKillEmAllGameMode();
+
 	virtual void PawnKilled(APawn* KilledPawn) override;
 
 private:

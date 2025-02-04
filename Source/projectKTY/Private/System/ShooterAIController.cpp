@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/projectKTYCharacter.h"
+#include "Character/TPSCharacter.h"
 
 void AShooterAIController::Tick(float DeltaSeconds)
 {
@@ -14,7 +15,7 @@ void AShooterAIController::Tick(float DeltaSeconds)
 
 bool AShooterAIController::IsDead() const
 {
-	AprojectKTYCharacter* ControlledCharacter = Cast<AprojectKTYCharacter>(GetPawn());
+	ATPSCharacter* ControlledCharacter = Cast<ATPSCharacter>(GetPawn());
 	if (ControlledCharacter != nullptr)
 	{
 		return ControlledCharacter->IsDead();

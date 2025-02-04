@@ -76,6 +76,16 @@ void ATPSCharacter::PlayDeadAnimation()
 void ATPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (GetCharacterMovement())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CharacterMovementComponent is valid."));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("CharacterMovementComponent is NULL! Movement won't work."));
+	}
+
 	SetDefaultStatus();
 }
 
@@ -83,6 +93,7 @@ void ATPSCharacter::SetDefaultStatus()
 {
 	MaxHealth = StatComponent->GetMaxHp();
 	Health = MaxHealth;
+	UE_LOG(LogTemp, Warning, TEXT("Character Health: %d"), Health);
 	WalkSpeed = StatComponent->GetSpeed() * 100;
 	SprintSpeed = WalkSpeed * 2;
 
@@ -119,21 +130,26 @@ void ATPSCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
+	// UE_LOG(LogTemp, Warning, TEXT("MoveForward called with X: %f, Y: %f"), MovementVector.X, MovementVector.Y);
+
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
+		// get forward and right vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// 로그 추가 (이동 벡터 확인)
+		// UE_LOG(LogTemp, Warning, TEXT("Applying movement: Forward: %f, Right: %f"), MovementVector.Y, MovementVector.X);
 
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		// UE_LOG(LogTemp, Warning, TEXT("AddMovement() Called"));
 	}
 }
 
@@ -150,4 +166,47 @@ void ATPSCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void ATPSCharacter::Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	bIsSprinting = true;
+
+	UE_LOG(LogTemp, Warning, TEXT("Sprint() Called"));
+
+	if (HasAuthority() == false)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Successfully Server Sprint() Called"));
+		ServerSetSprint(true);
+	}
+}
+
+void ATPSCharacter::StopSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	bIsSprinting = false;
+
+	UE_LOG(LogTemp, Warning, TEXT("StopSprint() Called"));
+	if (HasAuthority() == false)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Successfully Server StopSprint() Called"));
+		ServerSetSprint(false);
+	}
+}
+
+void ATPSCharacter::ServerSetSprint_Implementation(bool IsSprinting)
+{
+	if (IsSprinting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
+}
+
+void ATPSCharacter::MulticastSetDie_Implementation()
+{
+	SetDead();
+}
 

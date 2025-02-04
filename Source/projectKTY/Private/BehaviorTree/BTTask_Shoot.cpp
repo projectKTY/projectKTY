@@ -5,6 +5,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
 #include "Character/projectKTYCharacter.h"
+#include "Character/TPSCharacter.h"
+#include "Enemy/EnemySoldierType.h"
 
 
 UBTTask_Shoot::UBTTask_Shoot()
@@ -23,13 +25,14 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 		return EBTNodeResult::Failed;
 	}
 
-	AprojectKTYCharacter* Character = Cast<AprojectKTYCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	ATPSCharacter* Character = Cast<ATPSCharacter>(OwnerComp.GetAIOwner()->GetPawn());
 	if (Character == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
-
-	Character->Shoot();
+	// Change to Enemy Character class and check has gun
+	// AEnemySoldierType* EnemyCharacter = Cast<AEnemySoldierType>(Character);
+	// EnemyCharacter->Attack_Shot();
 
 	return EBTNodeResult::Succeeded;
 }

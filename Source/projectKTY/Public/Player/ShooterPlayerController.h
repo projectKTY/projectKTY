@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "System/TPSInputManager.h"
 #include "GameFramework/PlayerController.h"
 #include "ShooterPlayerController.generated.h"
 
@@ -23,7 +24,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void SetupInputComponent() override;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -42,6 +42,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UUserWidget* HUD;
-
-	UTPSInputManager* InputManager;
+	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	class UTPSInputManager* InputManager;
 };

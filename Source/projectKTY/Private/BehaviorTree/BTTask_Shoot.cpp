@@ -31,8 +31,8 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 		return EBTNodeResult::Failed;
 	}
 	// Change to Enemy Character class and check has gun
-	// AEnemySoldierType* EnemyCharacter = Cast<AEnemySoldierType>(Character);
-	// EnemyCharacter->Attack_Shot();
+	AEnemySoldierType* EnemyCharacter = Cast<AEnemySoldierType>(Character);
+	EnemyCharacter->Attack_Shot();
 
 	return EBTNodeResult::Succeeded;
 }

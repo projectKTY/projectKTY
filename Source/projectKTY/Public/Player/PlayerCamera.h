@@ -27,10 +27,25 @@ public:
 	// Sets default values for this component's properties
 	UPlayerCamera();
 
+	void ZoomIn();
+	void ZoomOut();
+
+	bool bIsZoomedIn;
+	float DefaultFOV;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+	float ZoomedFOV;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+	float ZoomInterpSpeed;
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	void SetAttachmentToPlayer(APlayerCharacter* Player);
+
+protected:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 };

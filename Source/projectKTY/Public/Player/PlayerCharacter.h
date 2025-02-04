@@ -22,6 +22,8 @@ public:
 	APlayerCharacter();
 
 	void OnShot();
+	void OnZoom();
+	void ReleaseZoom();
 
 protected:
 	virtual void BeginPlay() override;

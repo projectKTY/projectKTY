@@ -30,7 +30,7 @@ float ATPSCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	if (IsDead())
 	{
 		// Server
-		// MulticastSetDie();
+		MulticastSetDie();
 
 		// client
 		AprojectKTYGameMode* GameMode = GetWorld()->GetAuthGameMode<AprojectKTYGameMode>();

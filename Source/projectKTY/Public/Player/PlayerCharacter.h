@@ -25,6 +25,9 @@ public:
 	void OnZoom();
 	void ReleaseZoom();
 
+	UFUNCTION(BlueprintPure)
+	UWeaponManager* GetWeaponManager();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

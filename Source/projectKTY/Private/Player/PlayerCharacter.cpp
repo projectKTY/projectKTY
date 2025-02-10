@@ -43,13 +43,18 @@ void APlayerCharacter::ReleaseZoom()
 	}
 }
 
+UWeaponManager* APlayerCharacter::GetWeaponManager()
+{
+	return WeaponManager;
+}
+
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (WeaponManager != nullptr)
 	{
-		WeaponManager->SetGunMesh(this, TEXT("gun"));
+		WeaponManager->SetGunMesh(this, TEXT("weapon_r"));
 	}
 }
 

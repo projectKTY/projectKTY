@@ -6,6 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "Gun.generated.h"
 
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	EWT_None			UMETA(DisplayName = "None"),
+	EWT_AssaultRifle	UMETA(DisplayName = "Assault Rifle"),
+	EWT_HandGun			UMETA(DisplayName = "HandGun"),
+	EWT_SniperRifle		UMETA(DisplayName = "Sniper Rifle"),
+	EWT_Shotgun			UMETA(DisplayName = "Shotgun")
+};
+
 UCLASS()
 class PROJECTKTY_API AGun : public AActor
 {
@@ -15,7 +25,8 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 	
-	void PullTrigger();
+	virtual void PullTrigger();
+	virtual void ApplyRecoil();
 
 	void CreateMuzzleEffect();
 	void PlayMuzzleSound();
@@ -28,6 +39,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintPure, Category = "Weapon")
+	EWeaponType GetWeaponType() const { return WeaponType; }
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -47,14 +60,28 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* ImpactSound;
+	
+	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
+	AController* GetOwnerController() const;
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EWeaponType WeaponType = EWeaponType::EWT_None;
+
+	// 총기 최대 사거리
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 5000.0f;
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10.0f;
 
-	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+	// 반동 크기
+	UPROPERTY(EditAnywhere)
+	float RecoilAmount = 1.5f;
 
-	AController* GetOwnerController() const;
+	// 반동 랜덤값
+	UPROPERTY(EditAnywhere)
+	FVector2D RecoilPattern = FVector2D(0.5f, 1.0f);
 };

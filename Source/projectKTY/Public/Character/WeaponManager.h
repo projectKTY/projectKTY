@@ -30,12 +30,29 @@ public:
 	void GunFire();
 	bool HasGun();
 
+	UFUNCTION(BlueprintCallable)
+	EWeaponType GetCurrentWeaponType() const;
+
+	void EquipWeapon(AGun* NewWeapon);
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGun> GunClass;
 	
 	UPROPERTY()
 	AGun* Gun;
+
+protected:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	AGun* EquippedWeapon;
+
+public:
+	UFUNCTION(BlueprintPure)
+	bool IsRifle() const;
+
+	UFUNCTION(BlueprintPure)
+	bool IsHandGun() const;
 
 protected:
 	UFUNCTION(Server, Reliable)

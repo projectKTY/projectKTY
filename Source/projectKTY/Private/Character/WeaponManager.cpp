@@ -28,6 +28,7 @@ void UWeaponManager::BeginPlay()
 void UWeaponManager::SetGunMesh(ACharacter* Character, FName BoneName)
 {
 	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	EquipWeapon(Gun);
 	auto* Mesh = Character->GetMesh();
 	Mesh->HideBoneByName(BoneName, EPhysBodyOp::PBO_None);
 	Gun->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
@@ -47,6 +48,29 @@ void UWeaponManager::GunFire()
 bool UWeaponManager::HasGun()
 {
 	return Gun != nullptr;
+}
+
+EWeaponType UWeaponManager::GetCurrentWeaponType() const
+{
+	return EquippedWeapon ? EquippedWeapon->GetWeaponType() : EWeaponType::EWT_None;
+}
+
+void UWeaponManager::EquipWeapon(AGun* NewWeapon)
+{
+	if (NewWeapon)
+	{
+		EquippedWeapon = NewWeapon;
+	}
+}
+
+bool UWeaponManager::IsRifle() const
+{
+	return false;
+}
+
+bool UWeaponManager::IsHandGun() const
+{
+	return false;
 }
 
 void UWeaponManager::MulticastSetFire_Implementation()

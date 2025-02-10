@@ -39,6 +39,8 @@ void AGun::PullTrigger()
 	bool bSuccess = GunTrace(Hit, ShotDirection);
 	if (bSuccess)
 	{
+		// 반동 적용
+		ApplyRecoil();
 		// DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
 		// UE_LOG(LogTemp, Warning, TEXT("%s Hit"), *Hit.GetActor()->GetName());
 		PlayMuzzleSound();
@@ -52,6 +54,29 @@ void AGun::PullTrigger()
 			FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
 			AController* OwnerController = GetOwnerController();
 			HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+		}
+	}
+}
+
+void AGun::ApplyRecoil()
+{
+	AController* OwnerController = GetOwnerController();
+	if (OwnerController)
+	{
+		APawn* OwnerPawn = OwnerController->GetPawn();
+		if (OwnerPawn)
+		{
+			APlayerController* PlayerController = Cast<APlayerController>(OwnerController);
+			if (PlayerController)
+			{
+				FRotator CurrentRotation = PlayerController->GetControlRotation();
+
+				float RecoilPitch = FMath::RandRange(RecoilPattern.X, RecoilPattern.Y) * RecoilAmount;
+				float RecoilYaw = FMath::RandRange(-RecoilPattern.X, RecoilPattern.X) * RecoilAmount;
+
+				FRotator NewRotation = FRotator(CurrentRotation.Pitch + RecoilPitch, CurrentRotation.Yaw + RecoilYaw, CurrentRotation.Roll);
+				PlayerController->SetControlRotation(NewRotation);
+			}
 		}
 	}
 }

@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	class UCharacterStatComponent* StatComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	bool bIsAiming = false;
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 1;
@@ -49,6 +52,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	bool IsAiming() const { return bIsAiming; }
+
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
 
@@ -64,6 +70,9 @@ public:
 
 	void Sprint();
 	void StopSprint();
+
+	void StartAiming();
+	void StopAiming();
 
 protected:
 	virtual void BeginPlay();

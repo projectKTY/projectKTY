@@ -202,6 +202,7 @@ void UTPSInputManager::OnAiming()
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
 		PlayerCharacter->OnZoom();
+		PlayerCharacter->StartAiming();
 	}
 }
 
@@ -211,5 +212,6 @@ void UTPSInputManager::OnStopAiming()
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
 		PlayerCharacter->ReleaseZoom();
+		PlayerCharacter->StopAiming();
 	}
 }

@@ -193,6 +193,16 @@ void ATPSCharacter::StopSprint()
 	}
 }
 
+void ATPSCharacter::StartAiming()
+{
+	bIsAiming = true;
+}
+
+void ATPSCharacter::StopAiming()
+{
+	bIsAiming = false;
+}
+
 void ATPSCharacter::ServerSetSprint_Implementation(bool IsSprinting)
 {
 	if (IsSprinting)

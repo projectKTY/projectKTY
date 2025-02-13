@@ -27,10 +27,10 @@ public:
 	
 	virtual void PullTrigger();
 	virtual void ApplyRecoil();
+	virtual void FireWeapon(FHitResult& Hit, FVector& ShotDirection);
 
-	void CreateMuzzleEffect();
-	void PlayMuzzleSound();
-
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastHandleWeaponEffects(const FHitResult& Hit, const FVector& ShotDirection);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -84,4 +84,7 @@ protected:
 	// ¹Ýµ¿ ·£´ý°ª
 	UPROPERTY(EditAnywhere)
 	FVector2D RecoilPattern = FVector2D(0.5f, 1.0f);
+
+
+
 };

@@ -86,4 +86,10 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSetDie();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetAim(bool IsAim);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetAim(bool IsAim);
 };

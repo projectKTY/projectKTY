@@ -31,6 +31,9 @@ public:
 	void CreateMuzzleEffect();
 	void PlayMuzzleSound();
 
+	void StartFiring();
+	void StopFiring();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -70,18 +73,28 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EWeaponType WeaponType = EWeaponType::EWT_None;
 
-	// 총기 최대 사거리
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 5000.0f;
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10.0f;
 
-	// 반동 크기
+	// Recoil Multiplication Value
 	UPROPERTY(EditAnywhere)
 	float RecoilAmount = 1.5f;
 
-	// 반동 랜덤값
+	// Recoil Random Pattern Range
 	UPROPERTY(EditAnywhere)
 	FVector2D RecoilPattern = FVector2D(0.5f, 1.0f);
+
+	// AttackSpeed
+	UPROPERTY(EditAnywhere)
+	float FireRate = 1.0f;
+
+	// Count of Magazine
+	UPROPERTY(EditAnywhere)
+	int32 Magazine = 30;
+
+	FTimerHandle FireTimerHandle;
+	bool bIsFiring = false;
 };

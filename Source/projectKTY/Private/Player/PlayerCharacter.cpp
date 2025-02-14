@@ -23,7 +23,19 @@ void APlayerCharacter::OnShot()
 {
 	if (WeaponManager != nullptr)
 	{
-		WeaponManager->GunFire();
+		// 조준 중일 때만 사격 가능하도록
+		if (bIsAiming)
+		{
+			WeaponManager->GunFire();
+		}
+	}
+}
+
+void APlayerCharacter::StopShooting()
+{
+	if (WeaponManager != nullptr)
+	{
+		WeaponManager->StopGunFire();
 	}
 }
 

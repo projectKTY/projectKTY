@@ -45,6 +45,14 @@ void UWeaponManager::GunFire()
 	ServerSetFire();
 }
 
+void UWeaponManager::StopGunFire()
+{
+	if (Gun)
+	{
+		Gun->StopFiring();
+	}
+}
+
 bool UWeaponManager::HasGun()
 {
 	return Gun != nullptr;
@@ -85,7 +93,7 @@ void UWeaponManager::ServerSetFire_Implementation()
 {
 	if (Gun)
 	{
-		Gun->PullTrigger();
+		Gun->StartFiring();
 		MulticastSetFire();
 	}
 }

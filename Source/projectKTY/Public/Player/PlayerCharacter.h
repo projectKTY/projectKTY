@@ -22,6 +22,8 @@ public:
 	APlayerCharacter();
 
 	void OnShot();
+	void StopShooting();
+
 	void OnZoom();
 	void ReleaseZoom();
 

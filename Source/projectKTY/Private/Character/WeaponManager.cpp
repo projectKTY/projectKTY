@@ -52,6 +52,14 @@ void UWeaponManager::GunFire()
 	Gun->ApplyRecoil();
 }
 
+void UWeaponManager::StopGunFire()
+{
+	if (Gun)
+	{
+		Gun->StopFiring();
+	}
+}
+
 bool UWeaponManager::HasGun()
 {
 	return Gun != nullptr;

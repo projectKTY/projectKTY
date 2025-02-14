@@ -28,6 +28,7 @@ protected:
 public:
 	void SetGunMesh(ACharacter* Character, FName BoneName);
 	void GunFire();
+	void StopGunFire();
 	bool HasGun();
 
 	UFUNCTION(BlueprintCallable)

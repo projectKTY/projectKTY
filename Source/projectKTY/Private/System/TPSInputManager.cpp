@@ -130,7 +130,8 @@ void UTPSInputManager::BindInputActions(UEnhancedInputComponent* InputComponent)
 	InputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &UTPSInputManager::OnStopSprint);
 
 	// Shooting
-	InputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &UTPSInputManager::OnShoot);
+	InputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &UTPSInputManager::OnShoot);
+	InputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &UTPSInputManager::OnStopShoot);
 
 	// Aiming
 	InputComponent->BindAction(AimingAction, ETriggerEvent::Started, this, &UTPSInputManager::OnAiming);
@@ -191,8 +192,15 @@ void UTPSInputManager::OnShoot()
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
 		PlayerCharacter->OnShot();
+	}
+}
 
-		UE_LOG(LogTemp, Warning, TEXT("Shoot Called"));
+void UTPSInputManager::OnStopShoot()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->StopShooting();
 	}
 }
 

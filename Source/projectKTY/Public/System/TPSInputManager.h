@@ -35,6 +35,7 @@ protected:
 	void OnSprint();
 	void OnStopSprint();
 	void OnShoot();
+	void OnStopShoot();
 	void OnAiming();
 	void OnStopAiming();
 

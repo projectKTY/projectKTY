@@ -22,6 +22,24 @@ AGun::AGun()
 }
 
 
+void AGun::StartFiring()
+{
+	if (!bIsFiring)
+	{
+		bIsFiring = true;
+		PullTrigger();
+
+		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &AGun::PullTrigger, FireRate, true);
+	}
+}
+
+void AGun::StopFiring()
+{
+	bIsFiring = false;
+
+	GetWorldTimerManager().ClearTimer(FireTimerHandle);
+}
+
 void AGun::PullTrigger()
 {
 	FHitResult Hit;

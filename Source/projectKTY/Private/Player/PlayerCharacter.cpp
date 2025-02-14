@@ -8,7 +8,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	PlayerCamera = CreateDefaultSubobject<UPlayerCamera>(TEXT("PlayerCamera"));
 	if (PlayerCamera != nullptr)
@@ -43,7 +43,7 @@ void APlayerCharacter::OnZoom()
 {
 	if (PlayerCamera != nullptr)
 	{
-		PlayerCamera->ZoomIn();
+		PlayerCamera->ZoomIn();		
 	}
 }
 
@@ -75,7 +75,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	AShooterPlayerController* PlayerController = Cast<AShooterPlayerController>(GetController());
 	if (PlayerController)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Successfully retrived PlayerController"));
 
 		PlayerController->InputManager->Initialize(PlayerController, this);
 		auto* EnhancedInputComp = Cast<UEnhancedInputComponent>(InputComponent);

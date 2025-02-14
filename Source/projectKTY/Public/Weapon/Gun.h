@@ -27,13 +27,13 @@ public:
 	
 	virtual void PullTrigger();
 	virtual void ApplyRecoil();
+	virtual void FireWeapon(FHitResult& Hit, FVector& ShotDirection);
 
-	void CreateMuzzleEffect();
-	void PlayMuzzleSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastHandleWeaponEffects(const FHitResult& Hit, const FVector& ShotDirection);
 
 	void StartFiring();
 	void StopFiring();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

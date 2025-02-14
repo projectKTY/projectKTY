@@ -125,6 +125,7 @@ void ATPSCharacter::SetDefaultCharacterSettings()
 }
 
 
+
 void ATPSCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -195,12 +196,12 @@ void ATPSCharacter::StopSprint()
 
 void ATPSCharacter::StartAiming()
 {
-	bIsAiming = true;
+	ServerSetAim(true);
 }
 
 void ATPSCharacter::StopAiming()
 {
-	bIsAiming = false;
+	ServerSetAim(false);
 }
 
 void ATPSCharacter::ServerSetSprint_Implementation(bool IsSprinting)
@@ -220,3 +221,13 @@ void ATPSCharacter::MulticastSetDie_Implementation()
 	SetDead();
 }
 
+
+void ATPSCharacter::ServerSetAim_Implementation(bool IsAim)
+{
+	MulticastSetAim(IsAim);
+}
+
+void ATPSCharacter::MulticastSetAim_Implementation(bool IsAim)
+{
+	bIsAiming = IsAim;
+}

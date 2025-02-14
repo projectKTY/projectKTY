@@ -31,8 +31,14 @@ void UWeaponManager::SetGunMesh(ACharacter* Character, FName BoneName)
 	EquipWeapon(Gun);
 	auto* Mesh = Character->GetMesh();
 	Mesh->HideBoneByName(BoneName, EPhysBodyOp::PBO_None);
-	Gun->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	/*APlayerController* PlayerController = Cast<APlayerController>(Character->GetOwner());
+	if (PlayerController) 
+	{
+		Gun->SetOwner(PlayerController);
+	}*/
 	Gun->SetOwner(Character);
+	Gun->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	
 }
 
 void UWeaponManager::GunFire()
@@ -43,6 +49,7 @@ void UWeaponManager::GunFire()
 		Gun->PullTrigger();
 	}*/
 	ServerSetFire();
+	Gun->ApplyRecoil();
 }
 
 void UWeaponManager::StopGunFire()
@@ -81,19 +88,19 @@ bool UWeaponManager::IsHandGun() const
 	return false;
 }
 
-void UWeaponManager::MulticastSetFire_Implementation()
+void UWeaponManager::MulticastSetFire_Implementation(const FHitResult& Hit, const FVector& ShotDirection)
 {
-	if (Gun)
-	{
-		Gun->CreateMuzzleEffect();
-	}
+	Gun->MulticastHandleWeaponEffects(Hit, ShotDirection);
 }
 
 void UWeaponManager::ServerSetFire_Implementation()
 {
 	if (Gun)
 	{
-		Gun->StartFiring();
-		MulticastSetFire();
+		FHitResult Hit;
+		FVector ShotDirection;
+
+		Gun->FireWeapon(Hit, ShotDirection);
+		MulticastSetFire(Hit, ShotDirection);
 	}
 }

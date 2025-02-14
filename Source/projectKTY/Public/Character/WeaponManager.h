@@ -60,5 +60,5 @@ protected:
 	void ServerSetFire();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastSetFire();
+	void MulticastSetFire(const FHitResult& Hit, const FVector& ShotDirection);
 };

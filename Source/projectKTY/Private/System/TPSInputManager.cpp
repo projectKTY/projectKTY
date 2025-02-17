@@ -174,6 +174,12 @@ void UTPSInputManager::OnSprint()
 {
 	if (Character)
 	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		if (PlayerCharacter->IsAiming())
+		{
+			PlayerCharacter->ReleaseZoom();
+			PlayerCharacter->StopAiming();
+		}
 		Character->Sprint();
 	}
 }
@@ -209,6 +215,10 @@ void UTPSInputManager::OnAiming()
 	if (Character)
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		if (PlayerCharacter->bIsSprinting)
+		{
+			PlayerCharacter->StopSprint();
+		}
 		PlayerCharacter->OnZoom();
 		PlayerCharacter->StartAiming();
 	}

@@ -53,5 +53,5 @@ void AShooterPlayerController::BeginPlay()
 		{
 			HUD->AddToViewport();
 		}
-	}	
+	}
 }

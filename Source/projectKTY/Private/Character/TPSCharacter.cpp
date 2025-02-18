@@ -77,15 +77,6 @@ void ATPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetCharacterMovement())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("CharacterMovementComponent is valid."));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("CharacterMovementComponent is NULL! Movement won't work."));
-	}
-
 	SetDefaultStatus();
 }
 
@@ -107,11 +98,11 @@ void ATPSCharacter::SetDefaultCharacterSettings()
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->bOrientRotationToMovement = false; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
 
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
@@ -131,8 +122,6 @@ void ATPSCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	// UE_LOG(LogTemp, Warning, TEXT("MoveForward called with X: %f, Y: %f"), MovementVector.X, MovementVector.Y);
-
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -149,8 +138,6 @@ void ATPSCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
-
-		// UE_LOG(LogTemp, Warning, TEXT("AddMovement() Called"));
 	}
 }
 

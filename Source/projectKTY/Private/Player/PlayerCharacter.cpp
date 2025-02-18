@@ -8,7 +8,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-	//AutoPossessPlayer = EAutoReceiveInput::Player0;
+	PrimaryActorTick.bCanEverTick = true;
 
 	PlayerCamera = CreateDefaultSubobject<UPlayerCamera>(TEXT("PlayerCamera"));
 	if (PlayerCamera != nullptr)
@@ -17,6 +17,33 @@ APlayerCharacter::APlayerCharacter()
 	}
 
 	WeaponManager = CreateDefaultSubobject<UWeaponManager>(TEXT("WeaponManager"));
+
+	bIsMoving = false;
+}
+
+void APlayerCharacter::Move(const FInputActionValue& Value)
+{
+	Super::Move(Value);
+
+	/*FVector2D MovementVector = Value.Get<FVector2D>();
+	if (Controller != nullptr && MovementVector != FVector2D::ZeroVector)
+	{
+		if (!bIsMoving)
+		{
+			UpdateMovementState(true);
+		}
+	}*/
+}
+
+void APlayerCharacter::UpdateMovementState(bool bMoving)
+{
+	if (bIsMoving == bMoving) return;
+	bIsMoving = bMoving;
+
+	if (PlayerCamera)
+	{
+		PlayerCamera->SetCameraMode(bIsMoving);
+	}
 }
 
 void APlayerCharacter::OnShot()
@@ -84,4 +111,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerController->InputManager->BindInputActions(EnhancedInputComp);
 		}
 	}
+}
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	/*bool bCurrentlyMoving = GetVelocity().SizeSquared() > 10.0f;
+	if (bCurrentlyMoving != bIsMoving)
+	{
+		UpdateMovementState(bCurrentlyMoving);
+	}*/
 }

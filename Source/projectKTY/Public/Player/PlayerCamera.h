@@ -30,6 +30,9 @@ public:
 	void ZoomIn();
 	void ZoomOut();
 
+	// 이동 상태에 따라 카메라 회전 모드 변경
+	void SetCameraMode(bool bIsMoving);
+
 	bool bIsZoomedIn;
 	float DefaultFOV;
 

@@ -36,6 +36,22 @@ void UPlayerCamera::ZoomOut()
 	bIsZoomedIn = false;
 }
 
+void UPlayerCamera::SetCameraMode(bool bIsMoving)
+{
+	if (bIsMoving)
+	{
+		// 이동 시에는 카메라가 캐릭터 바라보는 방향을 회전하도록
+		CameraBoom->bUsePawnControlRotation = true;
+		UE_LOG(LogTemp, Warning, TEXT("bUsePawnControlRotation is True"));
+	}
+	else
+	{
+		// 정지 시에는 카메라가 캐릭터를 자유롭게 둘러보도록
+		CameraBoom->bUsePawnControlRotation = false;
+		UE_LOG(LogTemp, Warning, TEXT("bUsePawnControlRotation is False"));
+	}
+}
+
 void UPlayerCamera::SetAttachmentToPlayer(APlayerCharacter* Player)
 {
 	 CameraBoom->SetupAttachment(Player->GetRootComponent());

@@ -21,6 +21,9 @@ class PROJECTKTY_API APlayerCharacter : public ATPSCharacter
 public:
 	APlayerCharacter();
 
+	virtual void Move(const FInputActionValue& Value) override;
+	void UpdateMovementState(bool bMoving);
+
 	void OnShot();
 	void StopShooting();
 
@@ -33,6 +36,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Tick(float DeltaTime) override;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
@@ -40,4 +44,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class UPlayerCamera* PlayerCamera;
+
+	bool bIsMoving;
 };

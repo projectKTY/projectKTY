@@ -3,6 +3,8 @@
 
 #include "Character/WeaponManager.h"
 #include "Character/TPSCharacter.h"
+#include "Player/ShooterPlayerController.h"
+#include "Player/PlayerCharacter.h"
 #include "Weapon/Gun.h"
 
 // Sets default values for this component's properties
@@ -20,22 +22,14 @@ UWeaponManager::UWeaponManager()
 void UWeaponManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 void UWeaponManager::SetGunMesh(ACharacter* Character, FName BoneName)
 {
 	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-	EquipWeapon(Gun);
+	EquipWeapon(Character, Gun);
 	auto* Mesh = Character->GetMesh();
 	Mesh->HideBoneByName(BoneName, EPhysBodyOp::PBO_None);
-	/*APlayerController* PlayerController = Cast<APlayerController>(Character->GetOwner());
-	if (PlayerController) 
-	{
-		Gun->SetOwner(PlayerController);
-	}*/
 	Gun->SetOwner(Character);
 	Gun->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	
@@ -70,11 +64,48 @@ EWeaponType UWeaponManager::GetCurrentWeaponType() const
 	return EquippedWeapon ? EquippedWeapon->GetWeaponType() : EWeaponType::EWT_None;
 }
 
-void UWeaponManager::EquipWeapon(AGun* NewWeapon)
+void UWeaponManager::EquipWeapon(ACharacter* Character, AGun* NewWeapon)
 {
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+	if (PlayerCharacter)
+	{
+		// OnAmmoChangedDelegate.RemoveDynamic(PlayerCharacter, &APlayerCharacter::OnAmmoChanged);
+		OnAmmoChangedDelegate.AddDynamic(PlayerCharacter, &APlayerCharacter::OnAmmoChanged);
+	}
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->OnGunAmmoChangedDelegate.RemoveDynamic(this, &UWeaponManager::NotifyAmmoChanged);
+	}
+
+
 	if (NewWeapon)
 	{
 		EquippedWeapon = NewWeapon;
+		EquippedWeapon->SetOwner(Character);
+		EquippedWeapon->OnGunAmmoChangedDelegate.AddDynamic(this, &UWeaponManager::NotifyAmmoChanged);
+		if (EquippedWeapon->OnGunAmmoChangedDelegate.IsBound())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("WeaponManager Successfully bound to OnGunAmmoChangedDelegate"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("WeaponManager failed to bound OnGunAmmoChangedDelegate"));
+		}
+		NotifyAmmoChanged(EquippedWeapon->GetCurrentAmmo(), EquippedWeapon->GetMagazine());
+		EquippedWeapon->UpdateHUD();
+	}
+}
+
+void UWeaponManager::NotifyAmmoChanged(int32 CurrentAmmo, int32 Magazine)
+{
+	if (OnAmmoChangedDelegate.IsBound())
+	{
+		OnAmmoChangedDelegate.Broadcast(CurrentAmmo, Magazine);
+		UE_LOG(LogTemp, Warning, TEXT("NotifyAmmoChanged is working"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NotifyAmmoChanged is not working"));
 	}
 }
 
@@ -100,7 +131,8 @@ void UWeaponManager::ServerSetFire_Implementation()
 		FHitResult Hit;
 		FVector ShotDirection;
 
-		Gun->FireWeapon(Hit, ShotDirection);
+		// Gun->FireWeapon(Hit, ShotDirection);
+		Gun->StartFiring();
 		MulticastSetFire(Hit, ShotDirection);
 	}
 }

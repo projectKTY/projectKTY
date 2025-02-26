@@ -87,6 +87,21 @@ UWeaponManager* APlayerCharacter::GetWeaponManager()
 	return WeaponManager;
 }
 
+void APlayerCharacter::OnAmmoChanged(int32 CurrentAmmo, int32 Magazine)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnAmmoChanged Call"));
+	AShooterPlayerController* PlayerController = Cast<AShooterPlayerController>(GetController());
+	if (PlayerController)
+	{
+		PlayerController->UpdateHUD(CurrentAmmo, Magazine);
+		UE_LOG(LogTemp, Warning, TEXT("OnAmmoChanged is working"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OnAmmoChanged in PlayerCharacter.cpp not working"));
+	}
+}
+
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -94,6 +109,7 @@ void APlayerCharacter::BeginPlay()
 	if (WeaponManager != nullptr)
 	{
 		WeaponManager->SetGunMesh(this, TEXT("weapon_r"));
+		// WeaponManager->OnAmmoChangedDelegate.AddDynamic(this, &APlayerCharacter::OnAmmoChanged);
 	}
 }
 

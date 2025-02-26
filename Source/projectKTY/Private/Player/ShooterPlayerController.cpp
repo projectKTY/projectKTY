@@ -5,6 +5,7 @@
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Player/PlayerCharacter.h"
+#include "UI/HUD/PlayerHUDWidget.h"
 #include "System/TPSInputManager.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -36,10 +37,33 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 				LoseScreen->AddToViewport();
 			}
 		}
-
+		
 		GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 	}
 
+}
+
+void AShooterPlayerController::UpdateHUD(int32 CurrentAmmo, int32 Magazine)
+{
+	if (!IsLocalController())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UpdateHUD Called on Server! Skipping UI Update"));
+		return;
+	}
+
+	if (HUD)
+	{
+		HUD->UpdateAmmoDisplay(CurrentAmmo, Magazine);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HUD is Null"));
+	}
+}
+
+UPlayerHUDWidget* AShooterPlayerController::GetHUD() const
+{
+	return HUD;
 }
 
 void AShooterPlayerController::BeginPlay()
@@ -48,10 +72,15 @@ void AShooterPlayerController::BeginPlay()
 
 	if (!HasAuthority())
 	{
-		HUD = CreateWidget(this, HUDClass);
+	}
+		HUD = CreateWidget<UPlayerHUDWidget>(this, HUDClass);
 		if (HUD != nullptr)
 		{
 			HUD->AddToViewport();
+			UE_LOG(LogTemp, Warning, TEXT("HUDWidget Successfully Added to Viewport"));
 		}
-	}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to Create HUDWidget"));
+		}
 }

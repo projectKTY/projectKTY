@@ -84,7 +84,7 @@ void ATPSCharacter::SetDefaultStatus()
 {
 	MaxHealth = StatComponent->GetMaxHp();
 	Health = MaxHealth;
-	UE_LOG(LogTemp, Warning, TEXT("Character Health: %d"), Health);
+	     
 	WalkSpeed = StatComponent->GetSpeed() * 100;
 	SprintSpeed = WalkSpeed * 2;
 

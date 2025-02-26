@@ -4,9 +4,11 @@
 #include "Weapon/Gun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
+#include "Player/ShooterPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/DamageEvents.h"
+#include "TimerManager.h"
 
 // Sets default values
 AGun::AGun()
@@ -19,6 +21,8 @@ AGun::AGun()
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
+
+	CurrentAmmo = Magazine;
 }
 
 
@@ -40,37 +44,101 @@ void AGun::StopFiring()
 	GetWorldTimerManager().ClearTimer(FireTimerHandle);
 }
 
+void AGun::UpdateHUD()
+{
+	AShooterPlayerController* PlayerController = Cast<AShooterPlayerController>(GetOwnerController());
+	if (PlayerController)
+	{
+		PlayerController->UpdateHUD(CurrentAmmo, Magazine);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PC is NULL"));
+	}
+}
+
+
+void AGun::DecreaseAmmoCount()
+{
+	--CurrentAmmo;
+	UE_LOG(LogTemp, Warning, TEXT("CurrentAmmo: %d"), CurrentAmmo);
+
+	if (OnGunAmmoChangedDelegate.IsBound())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OnGunAmmoChangedDelegate is Bound"));
+		OnGunAmmoChangedDelegate.Broadcast(CurrentAmmo, Magazine);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("OnGunAmmoChangedDelegate is not Bound"));
+	}
+}
+
+void AGun::ResetAmmoCount()
+{
+	CurrentAmmo = Magazine;
+}
+
 void AGun::PullTrigger()
 {
-	FHitResult Hit;
-	FVector ShotDirection;
-
-	bool bSuccess = GunTrace(Hit, ShotDirection);
-	if (bSuccess)
+	// When During Reload, Don't Shoot 
+	if (bIsReloading)
 	{
-		// 반동 적용
-		ApplyRecoil();
-		// DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
-		// UE_LOG(LogTemp, Warning, TEXT("%s Hit"), *Hit.GetActor()->GetName());
-		//PlayMuzzleSound();
+		return;
+	}
 
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, ShotDirection.Rotation());
-		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSound, Hit.Location);
+	if (CurrentAmmo > 0)
+	{
+		DecreaseAmmoCount();
 
-		AActor* HitActor = Hit.GetActor();
-		if (HitActor != nullptr)
+		FHitResult Hit;
+		FVector ShotDirection;
+
+		bool bSuccess = GunTrace(Hit, ShotDirection);
+		if (bSuccess)
 		{
-			FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
-			AController* OwnerController = GetOwnerController();
-			HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+			// 반동 적용
+			ApplyRecoil();
+			// DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
+			// UE_LOG(LogTemp, Warning, TEXT("%s Hit"), *Hit.GetActor()->GetName());
+			//PlayMuzzleSound();
+
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, ShotDirection.Rotation());
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSound, Hit.Location);
+
+			AActor* HitActor = Hit.GetActor();
+			if (HitActor != nullptr)
+			{
+				FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
+				AController* OwnerController = GetOwnerController();
+				HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+			}
 		}
 	}
+	else
+	{
+		// Reload();
+	}
+}
+
+void AGun::Reload()
+{
+	if (bIsReloading || CurrentAmmo == Magazine) return;
+
+	bIsReloading = true;
+
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindUFunction(this, FName("FinishReload"));
+
+	GetWorldTimerManager().SetTimer(ReloadTimerHandle, TimerDelegate, ReloadTime, false);
+
+	ResetAmmoCount();
 }
 
 void AGun::ApplyRecoil()
 {
 	APlayerController* PlayerController = Cast<APlayerController>(GetOwnerController());
-	if (PlayerController)
+	if (PlayerController)                                                           
 	{
 		APawn* OwnerPawn = PlayerController->GetPawn();
 		if (OwnerPawn)
@@ -106,13 +174,16 @@ void AGun::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (!OnGunAmmoChangedDelegate.IsBound())
+	{
+		UE_LOG(LogTemp, Error, TEXT("OnGunAmmoChangedDelegate is not bound in BeginPlay"));
+	}
 }
 
 // Called every frame
 void AGun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
@@ -137,6 +208,13 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 	Params.AddIgnoredActor(Owner);
 
 	return GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+}
+
+void AGun::FinishReload()
+{
+	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+	CurrentAmmo = Magazine;
+	bIsReloading = false;
 }
 
 void AGun::MulticastHandleWeaponEffects_Implementation(const FHitResult& Hit, const FVector& ShotDirection)
@@ -174,4 +252,3 @@ AController* AGun::GetOwnerController() const
 	}
 	return OwnerPawn->GetController();
 }
-

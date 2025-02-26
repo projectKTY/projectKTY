@@ -16,6 +16,8 @@ enum class EWeaponType : uint8
 	EWT_Shotgun			UMETA(DisplayName = "Shotgun")
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGunAmmoChangedDelegate, int32, CurrentAmmo, int32, Magazine);
+
 UCLASS()
 class PROJECTKTY_API AGun : public AActor
 {
@@ -26,6 +28,7 @@ public:
 	AGun();
 	
 	virtual void PullTrigger();
+	virtual void Reload();
 	virtual void ApplyRecoil();
 	virtual void FireWeapon(FHitResult& Hit, FVector& ShotDirection);
 
@@ -34,6 +37,18 @@ public:
 
 	void StartFiring();
 	void StopFiring();
+	
+	FOnGunAmmoChangedDelegate OnGunAmmoChangedDelegate;
+
+	void UpdateHUD();
+	void DecreaseAmmoCount();
+	void ResetAmmoCount();
+
+	UFUNCTION(BlueprintPure)
+	int32 GetCurrentAmmo() const { return CurrentAmmo; }
+	
+	UFUNCTION(BlueprintPure)
+	int32 GetMagazine() const { return Magazine; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -66,6 +81,8 @@ private:
 	
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
+	void FinishReload();
+
 	AController* GetOwnerController() const;
 
 protected:
@@ -94,6 +111,17 @@ protected:
 	// Count of Magazine
 	UPROPERTY(EditAnywhere)
 	int32 Magazine = 30;
+
+	// Current Remain Ammo
+	UPROPERTY(VisibleAnywhere)
+	int32 CurrentAmmo;
+
+	// Reload Time(Speed)
+	UPROPERTY(EditAnywhere)
+	float ReloadTime = 1.5f;
+
+	FTimerHandle ReloadTimerHandle;
+	bool bIsReloading = false;
 
 	FTimerHandle FireTimerHandle;
 	bool bIsFiring = false;

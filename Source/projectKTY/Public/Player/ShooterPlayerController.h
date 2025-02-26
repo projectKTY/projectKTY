@@ -11,6 +11,7 @@
  * 
  */
 
+class UPlayerHUDWidget;
 class UTPSInputManager;
 
 UCLASS()
@@ -21,6 +22,10 @@ class PROJECTKTY_API AShooterPlayerController : public APlayerController
 public:
 	AShooterPlayerController();
 	virtual void GameHasEnded(class AActor* EndGameFocus, bool bIsWinner) override;
+
+	void UpdateHUD(int32 CurrentAmmo, int32 Magazine);
+
+	UPlayerHUDWidget* GetHUD() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,7 +38,7 @@ private:
 	TSubclassOf<class UUserWidget> WinScreenClass;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UUserWidget> HUDClass;
+	TSubclassOf<UPlayerHUDWidget> HUDClass;
 
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.0f;
@@ -41,7 +46,7 @@ private:
 	FTimerHandle RestartTimer;
 
 	UPROPERTY(EditAnywhere)
-	UUserWidget* HUD;
+	UPlayerHUDWidget* HUD;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (AllowPrivateAccess = "true"))

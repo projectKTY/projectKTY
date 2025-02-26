@@ -12,6 +12,8 @@
 
 class AGun;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedDelegate, int32, CurrentAmmo, int32, Magazine);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTKTY_API UWeaponManager : public UActorComponent
 {
@@ -34,7 +36,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	EWeaponType GetCurrentWeaponType() const;
 
-	void EquipWeapon(AGun* NewWeapon);
+	UFUNCTION(BlueprintPure)
+	bool IsRifle() const;
+
+	UFUNCTION(BlueprintPure)
+	bool IsHandGun() const;
+
+	void EquipWeapon(ACharacter* Character, AGun* NewWeapon);
+	UFUNCTION()
+	void NotifyAmmoChanged(int32 CurrentAmmo, int32 Magazine);
 
 private:
 	UPROPERTY(EditDefaultsOnly)
@@ -49,11 +59,7 @@ protected:
 	AGun* EquippedWeapon;
 
 public:
-	UFUNCTION(BlueprintPure)
-	bool IsRifle() const;
-
-	UFUNCTION(BlueprintPure)
-	bool IsHandGun() const;
+	FOnAmmoChangedDelegate OnAmmoChangedDelegate;
 
 protected:
 	UFUNCTION(Server, Reliable)

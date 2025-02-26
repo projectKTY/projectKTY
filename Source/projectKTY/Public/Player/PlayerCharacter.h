@@ -33,6 +33,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	UWeaponManager* GetWeaponManager();
 
+	UFUNCTION()
+	void OnAmmoChanged(int32 CurrentAmmo, int32 Magazine);
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

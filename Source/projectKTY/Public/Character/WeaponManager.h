@@ -31,7 +31,10 @@ public:
 	void SetGunMesh(ACharacter* Character, FName BoneName);
 	void GunFire();
 	void StopGunFire();
+	UFUNCTION()
+	void ReloadWeapon();
 	bool HasGun();
+
 
 	UFUNCTION(BlueprintCallable)
 	EWeaponType GetCurrentWeaponType() const;

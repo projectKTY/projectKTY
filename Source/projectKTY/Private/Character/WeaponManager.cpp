@@ -54,6 +54,14 @@ void UWeaponManager::StopGunFire()
 	}
 }
 
+void UWeaponManager::ReloadWeapon()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Reload();
+	}
+}
+
 bool UWeaponManager::HasGun()
 {
 	return Gun != nullptr;

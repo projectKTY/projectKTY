@@ -49,6 +49,12 @@ UTPSInputManager::UTPSInputManager()
 	{
 		AimingAction = IA_AIMING.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_RELOAD(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Reload.IA_Reload'"));
+	if (IA_RELOAD.Succeeded())
+	{
+		ReloadAction = IA_RELOAD.Object;
+	}
 }
 
 void UTPSInputManager::Initialize(APlayerController* PlayerController, ATPSCharacter* ControlledCharacter)
@@ -136,6 +142,9 @@ void UTPSInputManager::BindInputActions(UEnhancedInputComponent* InputComponent)
 	// Aiming
 	InputComponent->BindAction(AimingAction, ETriggerEvent::Started, this, &UTPSInputManager::OnAiming);
 	InputComponent->BindAction(AimingAction, ETriggerEvent::Completed, this, &UTPSInputManager::OnStopAiming);
+
+	// Reload
+	InputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &UTPSInputManager::OnReload);
 }
 
 void UTPSInputManager::OnMove(const FInputActionValue& Value)
@@ -231,5 +240,14 @@ void UTPSInputManager::OnStopAiming()
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
 		PlayerCharacter->ReleaseZoom();
 		PlayerCharacter->StopAiming();
+	}
+}
+
+void UTPSInputManager::OnReload()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->StartReload();
 	}
 }

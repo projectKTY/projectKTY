@@ -30,6 +30,8 @@ public:
 	void OnZoom();
 	void ReleaseZoom();
 
+	void StartReload();
+
 	UFUNCTION(BlueprintPure)
 	UWeaponManager* GetWeaponManager();
 

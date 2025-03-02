@@ -82,6 +82,14 @@ void APlayerCharacter::ReleaseZoom()
 	}
 }
 
+void APlayerCharacter::StartReload()
+{
+	if (WeaponManager && WeaponManager->HasGun())
+	{
+		WeaponManager->ReloadWeapon();
+	}
+}
+
 UWeaponManager* APlayerCharacter::GetWeaponManager()
 {
 	return WeaponManager;

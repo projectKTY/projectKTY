@@ -39,6 +39,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Move", meta = (AllowPrivateAccess = "true"))
 	float WalkSpeed;
 
+	FVector2D CurrentMoveInput;
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Move")
 	bool bIsSprinting = false;

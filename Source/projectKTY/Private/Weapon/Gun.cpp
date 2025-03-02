@@ -28,6 +28,12 @@ AGun::AGun()
 
 void AGun::StartFiring()
 {
+	if (bIsReloading)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gun is Reloading, Cannot Fire"));
+		return;
+	}
+
 	if (!bIsFiring)
 	{
 		bIsFiring = true;
@@ -215,6 +221,12 @@ void AGun::FinishReload()
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 	CurrentAmmo = Magazine;
 	bIsReloading = false;
+
+	// 재장전 후에 HUD 업데이트를 위한 WeaponManager에게 알림처리
+	if (OnGunAmmoChangedDelegate.IsBound())
+	{
+		OnGunAmmoChangedDelegate.Broadcast(CurrentAmmo, Magazine);
+	}
 }
 
 void AGun::MulticastHandleWeaponEffects_Implementation(const FHitResult& Hit, const FVector& ShotDirection)

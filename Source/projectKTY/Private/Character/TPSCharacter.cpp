@@ -121,6 +121,7 @@ void ATPSCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
+	CurrentMoveInput.Y = MovementVector.Y;
 
 	if (Controller != nullptr)
 	{
@@ -138,6 +139,11 @@ void ATPSCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		if (bIsSprinting && MovementVector.Y <= 0.0f)
+		{
+			StopSprint();
+		}
 	}
 }
 
@@ -156,6 +162,12 @@ void ATPSCharacter::Look(const FInputActionValue& Value)
 
 void ATPSCharacter::Sprint()
 {
+	if (CurrentMoveInput.Y <= 0)
+	{
+		// 앞으로 이동하지 않는 경우는 달리지 않음
+		return;
+	}
+
 	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
 	bIsSprinting = true;
 

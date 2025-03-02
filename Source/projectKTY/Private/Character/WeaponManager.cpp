@@ -43,7 +43,6 @@ void UWeaponManager::GunFire()
 		Gun->PullTrigger();
 	}*/
 	ServerSetFire();
-	Gun->ApplyRecoil();
 }
 
 void UWeaponManager::StopGunFire()
@@ -110,6 +109,17 @@ void UWeaponManager::NotifyAmmoChanged(int32 CurrentAmmo, int32 Magazine)
 	{
 		OnAmmoChangedDelegate.Broadcast(CurrentAmmo, Magazine);
 		UE_LOG(LogTemp, Warning, TEXT("NotifyAmmoChanged is working"));
+
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+		if (PlayerCharacter)
+		{
+			AShooterPlayerController* PC = Cast<AShooterPlayerController>(PlayerCharacter->GetController());
+			if (PC && PC->IsLocalController())
+			{
+				PC->UpdateHUD(CurrentAmmo, Magazine);
+			}
+		}
+
 	}
 	else
 	{
@@ -140,7 +150,14 @@ void UWeaponManager::ServerSetFire_Implementation()
 		FVector ShotDirection;
 
 		// Gun->FireWeapon(Hit, ShotDirection);
-		Gun->StartFiring();
-		MulticastSetFire(Hit, ShotDirection);
+		if (Gun->IsReloading())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Gun is Reloading"));
+		}
+		else
+		{
+			Gun->StartFiring();
+			MulticastSetFire(Hit, ShotDirection);
+		}
 	}
 }

@@ -49,6 +49,9 @@ public:
 	
 	UFUNCTION(BlueprintPure)
 	int32 GetMagazine() const { return Magazine; }
+
+	bool IsReloading() const { return bIsReloading; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -81,6 +84,7 @@ private:
 	
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
+	UFUNCTION()
 	void FinishReload();
 
 	AController* GetOwnerController() const;

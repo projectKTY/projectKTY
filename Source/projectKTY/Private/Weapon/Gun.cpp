@@ -123,7 +123,7 @@ void AGun::PullTrigger()
 	}
 	else
 	{
-		// Reload();
+		Reload();
 	}
 }
 

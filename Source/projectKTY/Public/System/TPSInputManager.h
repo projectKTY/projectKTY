@@ -40,6 +40,10 @@ protected:
 	void OnStopAiming();
 	void OnReload();
 
+	void SelectWeapon1();
+	void SelectWeapon2();
+	void SelectWeapon3();
+
 private:
 
 	ATPSCharacter* Character;
@@ -71,4 +75,13 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ReloadAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SelectWeapon1Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SelectWeapon2Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SelectWeapon3Action;
 };

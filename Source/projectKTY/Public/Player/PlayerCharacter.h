@@ -32,6 +32,15 @@ public:
 
 	void StartReload();
 
+	UFUNCTION()
+	void SelectWeapon1();
+
+	UFUNCTION()
+	void SelectWeapon2();
+
+	UFUNCTION()
+	void SelectWeapon3();
+
 	UFUNCTION(BlueprintPure)
 	UWeaponManager* GetWeaponManager();
 

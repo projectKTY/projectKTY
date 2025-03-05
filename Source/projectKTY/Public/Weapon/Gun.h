@@ -4,17 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Weapon/WeaponType.h"
 #include "Gun.generated.h"
-
-UENUM(BlueprintType)
-enum class EWeaponType : uint8
-{
-	EWT_None			UMETA(DisplayName = "None"),
-	EWT_AssaultRifle	UMETA(DisplayName = "Assault Rifle"),
-	EWT_HandGun			UMETA(DisplayName = "HandGun"),
-	EWT_SniperRifle		UMETA(DisplayName = "Sniper Rifle"),
-	EWT_Shotgun			UMETA(DisplayName = "Shotgun")
-};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGunAmmoChangedDelegate, int32, CurrentAmmo, int32, Magazine);
 

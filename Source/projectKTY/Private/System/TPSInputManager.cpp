@@ -55,6 +55,24 @@ UTPSInputManager::UTPSInputManager()
 	{
 		ReloadAction = IA_RELOAD.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_SELECTWEAPON_1(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Weapon1.IA_Weapon1'"));
+	if (IA_SELECTWEAPON_1.Succeeded())
+	{
+		SelectWeapon1Action = IA_SELECTWEAPON_1.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_SELECTWEAPON_2(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Weapon2.IA_Weapon2'"));
+	if (IA_SELECTWEAPON_2.Succeeded())
+	{
+		SelectWeapon2Action = IA_SELECTWEAPON_2.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_SELECTWEAPON_3(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_Weapon3.IA_Weapon3'"));
+	if (IA_SELECTWEAPON_3.Succeeded())
+	{
+		SelectWeapon3Action = IA_SELECTWEAPON_3.Object;
+	}
 }
 
 void UTPSInputManager::Initialize(APlayerController* PlayerController, ATPSCharacter* ControlledCharacter)
@@ -145,6 +163,11 @@ void UTPSInputManager::BindInputActions(UEnhancedInputComponent* InputComponent)
 
 	// Reload
 	InputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &UTPSInputManager::OnReload);
+
+	// Select Weapons
+	InputComponent->BindAction(SelectWeapon1Action, ETriggerEvent::Started, this, &UTPSInputManager::SelectWeapon1);
+	InputComponent->BindAction(SelectWeapon2Action, ETriggerEvent::Started, this, &UTPSInputManager::SelectWeapon2);
+	InputComponent->BindAction(SelectWeapon3Action, ETriggerEvent::Started, this, &UTPSInputManager::SelectWeapon3);
 }
 
 void UTPSInputManager::OnMove(const FInputActionValue& Value)
@@ -249,5 +272,32 @@ void UTPSInputManager::OnReload()
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
 		PlayerCharacter->StartReload();
+	}
+}
+
+void UTPSInputManager::SelectWeapon1()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->SelectWeapon1();
+	}
+}
+
+void UTPSInputManager::SelectWeapon2()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->SelectWeapon2();
+	}
+}
+
+void UTPSInputManager::SelectWeapon3()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->SelectWeapon3();
 	}
 }

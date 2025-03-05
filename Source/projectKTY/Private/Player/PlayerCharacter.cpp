@@ -4,6 +4,7 @@
 #include "Player/PlayerCharacter.h"
 #include "Player/PlayerCamera.h"
 #include "Player/ShooterPlayerController.h"
+#include "Weapon/WeaponType.h"
 #include "Character/WeaponManager.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -87,6 +88,30 @@ void APlayerCharacter::StartReload()
 	if (WeaponManager && WeaponManager->HasGun())
 	{
 		WeaponManager->ReloadWeapon();
+	}
+}
+
+void APlayerCharacter::SelectWeapon1()
+{
+	if (WeaponManager)
+	{
+		WeaponManager->ChangeWeapon(this, EWeaponType::EWT_AssaultRifle);
+	}
+}
+
+void APlayerCharacter::SelectWeapon2()
+{
+	if (WeaponManager)
+	{
+		WeaponManager->ChangeWeapon(this, EWeaponType::EWT_HandGun);
+	}
+}
+
+void APlayerCharacter::SelectWeapon3()
+{
+	if (WeaponManager)
+	{
+		WeaponManager->ChangeWeapon(this, EWeaponType::EWT_SniperRifle);
 	}
 }
 

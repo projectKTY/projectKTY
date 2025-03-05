@@ -68,7 +68,7 @@ bool UWeaponManager::HasGun()
 
 EWeaponType UWeaponManager::GetCurrentWeaponType() const
 {
-	return EquippedWeapon ? EquippedWeapon->GetWeaponType() : EWeaponType::EWT_None;
+	return EquippedWeapon ? EquippedWeapon->GetWeaponType() : EWeaponType::EWT_AssaultRifle;
 }
 
 void UWeaponManager::EquipWeapon(ACharacter* Character, AGun* NewWeapon)
@@ -135,6 +135,26 @@ bool UWeaponManager::IsRifle() const
 bool UWeaponManager::IsHandGun() const
 {
 	return false;
+}
+
+void UWeaponManager::ChangeWeapon(ACharacter* Character, EWeaponType NewWeaponType)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Call Change Weapon Function..."));
+	// 이미 착용한 무기와 동일 변경액션 x
+	if (EquippedWeapon && EquippedWeapon->GetWeaponType() == NewWeaponType)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Already Same Weapon Equipped"));
+		return;
+	}
+
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Destroy();
+	}
+
+	GunClass = WeaponClasses[NewWeaponType];
+	SetGunMesh(Character, TEXT("weapon_r"));
+
 }
 
 void UWeaponManager::MulticastSetFire_Implementation(const FHitResult& Hit, const FVector& ShotDirection)

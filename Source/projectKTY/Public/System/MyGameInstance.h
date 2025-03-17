@@ -21,8 +21,12 @@ public:
 	virtual void Init() override;
 
 	FMyCharacterData GetStatData(FName NameID);
+	FWeaponData GetWeaponData(FName NameID);
 
 private:
 	UPROPERTY()
 	class UDataTable* MyStatDatas;
+
+	UPROPERTY()
+	class UDataTable* WeaponDatas;
 };

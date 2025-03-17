@@ -5,6 +5,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "Player/ShooterPlayerController.h"
+#include "Player/PlayerCharacter.h"
+#include "Weapon/WeaponStatComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/DamageEvents.h"
@@ -22,7 +24,7 @@ AGun::AGun()
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
 
-	CurrentAmmo = Magazine;
+	WeaponStatComponent = CreateDefaultSubobject<UWeaponStatComponent>(TEXT("WeaponStatComponent"));
 }
 
 
@@ -48,6 +50,23 @@ void AGun::StopFiring()
 	bIsFiring = false;
 
 	GetWorldTimerManager().ClearTimer(FireTimerHandle);
+}
+
+void AGun::PlayReloadAnimation()
+{
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+	if (PlayerCharacter && ReloadMontage)
+	{
+		UAnimInstance* AnimInstance = PlayerCharacter->GetMesh()->GetAnimInstance();
+
+		float MontageLength = ReloadMontage->GetPlayLength();
+		float PlayRate = MontageLength / ReloadTime;
+
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(ReloadMontage, PlayRate);
+		}
+	}
 }
 
 void AGun::UpdateHUD()
@@ -133,6 +152,8 @@ void AGun::Reload()
 
 	bIsReloading = true;
 
+	PlayReloadAnimation();
+
 	FTimerDelegate TimerDelegate;
 	TimerDelegate.BindUFunction(this, FName("FinishReload"));
 
@@ -184,6 +205,10 @@ void AGun::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("OnGunAmmoChangedDelegate is not bound in BeginPlay"));
 	}
+
+	Magazine = WeaponStatComponent->GetMagazine();
+	CurrentAmmo = Magazine;
+	ReloadTime = WeaponStatComponent->GetReloadtime();
 }
 
 // Called every frame

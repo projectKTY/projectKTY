@@ -12,6 +12,11 @@ UMyGameInstance::UMyGameInstance()
 		MyStatDatas = STATDATA.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UDataTable> WEAPONDATA(TEXT("/Script/Engine.DataTable'/Game/DataTable/uasset/Weapon.Weapon'"));
+	if (STATDATA.Succeeded())
+	{
+		WeaponDatas = WEAPONDATA.Object;
+	}
 }
 
 void UMyGameInstance::Init()
@@ -29,4 +34,16 @@ FMyCharacterData UMyGameInstance::GetStatData(FName NameID)
 	}
 
 	return FMyCharacterData();
+}
+
+FWeaponData UMyGameInstance::GetWeaponData(FName NameID)
+{
+	FWeaponData* FoundRow = WeaponDatas->FindRow<FWeaponData>(NameID, TEXT("Get Weapon Data"), true);
+
+	if (FoundRow)
+	{
+		return *FoundRow;
+	}
+
+	return FWeaponData();
 }

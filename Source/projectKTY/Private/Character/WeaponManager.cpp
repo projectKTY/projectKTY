@@ -82,6 +82,7 @@ void UWeaponManager::EquipWeapon(ACharacter* Character, AGun* NewWeapon)
 	if (EquippedWeapon)
 	{
 		EquippedWeapon->OnGunAmmoChangedDelegate.RemoveDynamic(this, &UWeaponManager::NotifyAmmoChanged);
+		EquippedWeapon->OnGunAmmoChangedDelegate.RemoveAll(this);
 	}
 
 

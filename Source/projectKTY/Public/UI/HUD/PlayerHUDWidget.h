@@ -26,4 +26,10 @@ protected:
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "TEXT", meta = (BindWidget, AllowPrivateAccess = "true"))
 	UTextBlock* AmmoText;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* AmmoWarningText;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Crosshair;
 };

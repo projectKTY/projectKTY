@@ -29,6 +29,8 @@ public:
 	void StartFiring();
 	void StopFiring();
 	
+	void PlayReloadAnimation();
+
 	FOnGunAmmoChangedDelegate OnGunAmmoChangedDelegate;
 
 	void UpdateHUD();
@@ -72,6 +74,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* ImpactSound;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* ReloadMontage;
 	
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 
@@ -81,6 +86,9 @@ private:
 	AController* GetOwnerController() const;
 
 protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	class UWeaponStatComponent* WeaponStatComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EWeaponType WeaponType = EWeaponType::EWT_None;
@@ -105,7 +113,7 @@ protected:
 
 	// Count of Magazine
 	UPROPERTY(EditAnywhere)
-	int32 Magazine = 30;
+	int32 Magazine = 9999;
 
 	// Current Remain Ammo
 	UPROPERTY(VisibleAnywhere)

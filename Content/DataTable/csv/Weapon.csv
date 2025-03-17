@@ -1,0 +1,7 @@
+Name,Type,Maxhp,Attack,Defence,Movespeed,Crit,Critd,Accuracy,Rebound,Attackspeed,Magazine,Reloadtime,Skillshoot,Skill1,Skill2,Skill3,Skill4,Skill5,Skill6,Skill7
+H01_Handgun,HG,10,10,10,0.1,100,100,1,1,0.88,10,1.1,H01_Shoot,H01_Skill1,H01_Skill2,,,,,
+A01_AssaultRifle,AR,10,10,10,0.1,100,100,1,1,0.33,30,1.85,A01_Shoot,A01_Skill1,A01_Skill2,,,,,
+S01_Shotgun,SG,10,10,10,0.1,100,100,1,1,1,10,2,S01_Shoot,S01_Skill1,S01_Skill2,,,,,
+R01_Rifle,RF,10,10,10,0.1,100,100,1,1,2,7,3,R01_Shoot,R01_Skill1,R01_Skill2,,,,,
+M01_MonsterWeapon,Monster,0,0,0,0,0,0,1,1,5,1,2,None,M01_Skill1,0,,,,,
+B01_BossWeapon,Boss,0,0,0,0,0,0,1,1,10,1,2,None,B01_Skill1,B01_Skill2,B01_Skill3,B01_Skill4,B01_Skill5,,

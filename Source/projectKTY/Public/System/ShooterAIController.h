@@ -9,6 +9,18 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EAIState : uint8
+{
+	Idle,
+	Move,
+	Chase,
+	Attack,
+	Retreat,
+	Dead
+};
+
 UCLASS()
 class PROJECTKTY_API AShooterAIController : public AAIController
 {

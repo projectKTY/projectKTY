@@ -28,12 +28,34 @@ void AShooterAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (AIBehavior != nullptr)
+	/*if (AIBehavior != nullptr)
 	{
 		RunBehaviorTree(AIBehavior);
 
 		ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
-		GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+		if (GetBlackboardComponent() && GetPawn())
+		{
+			GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Blackboard or Pawn is NULL in AIController::BeginPlay"));
+		}
+	}*/
+}
+
+void AShooterAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if (AIBehavior)
+	{
+		RunBehaviorTree(AIBehavior);
+
+		if (GetBlackboardComponent() && InPawn)
+		{
+			GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), InPawn->GetActorLocation());
+		}
 	}
 }

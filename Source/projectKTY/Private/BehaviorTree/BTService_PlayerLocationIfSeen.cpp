@@ -16,24 +16,25 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
+	UBlackboardComponent* BB = OwnerComp.GetBlackboardComponent();
+	AAIController* AIController = OwnerComp.GetAIOwner();
 	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	if (PlayerCharacter == nullptr)
+
+	if (!BB || !AIController || !PlayerCharacter)
 	{
 		return;
 	}
 
-	if (OwnerComp.GetAIOwner() == nullptr)
+	if (AIController->LineOfSightTo(PlayerCharacter))
 	{
-		return;
-	}
-
-	if (OwnerComp.GetAIOwner()->LineOfSightTo(PlayerCharacter))
-	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(), PlayerCharacter);
+		// 플레이어가 보이면 타겟 등록 + 마지막 위치 갱신
+		BB->SetValueAsObject(GetSelectedBlackboardKey(), PlayerCharacter);
+		BB->SetValueAsVector(FName("LastKnownPlayerLocation"), PlayerCharacter->GetActorLocation());
 	}
 	else
 	{
-		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		// 플레이어가 보이지 않으면 TargetActor를 비움
+		// LastKnownPlayerLocation은 유지
+		BB->ClearValue(GetSelectedBlackboardKey());
 	}
-
 }

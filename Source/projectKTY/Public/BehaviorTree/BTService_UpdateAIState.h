@@ -22,7 +22,7 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "AI")
-	float AttackRange = 800.0f;
+	float AttackRange = 500.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
 	FBlackboardKeySelector TargetActorKey;

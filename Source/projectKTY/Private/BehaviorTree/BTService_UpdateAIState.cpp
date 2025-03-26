@@ -11,8 +11,8 @@
 UBTService_UpdateAIState::UBTService_UpdateAIState()
 {
 	NodeName = TEXT("Update AI State");
-	Interval = 0.5f;
-	RandomDeviation = 0.1f;
+	Interval = 0.35f;
+	RandomDeviation = 0.05f;
 }
 
 void UBTService_UpdateAIState::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)

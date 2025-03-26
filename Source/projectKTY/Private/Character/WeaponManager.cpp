@@ -22,6 +22,10 @@ UWeaponManager::UWeaponManager()
 void UWeaponManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 무기 초기화 및 라이플 장착 초안
+	InitializeWeapons(Cast<ACharacter>(GetOwner()));
+	EquipWeapon(EWeaponType::EWT_AssaultRifle);
 }
 
 void UWeaponManager::SetGunMesh(ACharacter* Character, FName BoneName)
@@ -85,7 +89,6 @@ void UWeaponManager::EquipWeapon(ACharacter* Character, AGun* NewWeapon)
 		EquippedWeapon->OnGunAmmoChangedDelegate.RemoveAll(this);
 	}
 
-
 	if (NewWeapon)
 	{
 		EquippedWeapon = NewWeapon;
@@ -101,6 +104,21 @@ void UWeaponManager::EquipWeapon(ACharacter* Character, AGun* NewWeapon)
 		}
 		NotifyAmmoChanged(EquippedWeapon->GetCurrentAmmo(), EquippedWeapon->GetMagazine());
 		EquippedWeapon->UpdateHUD();
+	}
+}
+
+void UWeaponManager::EquipWeapon(EWeaponType WeaponType)
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->SetActorHiddenInGame(true);
+	}
+
+	if (SpawnedWeapons.Contains(WeaponType))
+	{
+		EquippedWeapon = SpawnedWeapons[WeaponType];
+		EquippedWeapon->SetActorHiddenInGame(false);
+		// EquippedWeapon->OnEquip(); // 사운드 및 애니메이션 처리
 	}
 }
 
@@ -138,6 +156,25 @@ bool UWeaponManager::IsHandGun() const
 	return false;
 }
 
+void UWeaponManager::InitializeWeapons(ACharacter* OwnerCharacter)
+{
+	for (auto& WeaponClass : WeaponClasses)
+	{
+		if (WeaponClass.Value)
+		{
+			AGun* NewWeapon = GetWorld()->SpawnActor<AGun>(WeaponClass.Value);
+			if (NewWeapon)
+			{
+				NewWeapon->SetActorHiddenInGame(true);
+				NewWeapon->SetOwner(OwnerCharacter);
+				NewWeapon->AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+
+				SpawnedWeapons.Add(WeaponClass.Key, NewWeapon);
+			}
+		}
+	}
+}
+
 void UWeaponManager::ChangeWeapon(ACharacter* Character, EWeaponType NewWeaponType)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Call Change Weapon Function..."));
@@ -155,7 +192,6 @@ void UWeaponManager::ChangeWeapon(ACharacter* Character, EWeaponType NewWeaponTy
 
 	GunClass = WeaponClasses[NewWeaponType];
 	SetGunMesh(Character, TEXT("weapon_r"));
-
 }
 
 void UWeaponManager::MulticastSetFire_Implementation(const FHitResult& Hit, const FVector& ShotDirection)

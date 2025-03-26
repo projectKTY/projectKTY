@@ -46,10 +46,16 @@ public:
 	bool IsHandGun() const;
 
 	UFUNCTION()
+	void InitializeWeapons(ACharacter* OwnerCharacter);
+
+	UFUNCTION()
 	void ChangeWeapon(ACharacter* Character, EWeaponType NewWeaponType);
 
 	UFUNCTION()
 	void EquipWeapon(ACharacter* Character, AGun* NewWeapon);
+	UFUNCTION()
+	void EquipWeapon(EWeaponType WeaponType);
+
 	UFUNCTION()
 	void NotifyAmmoChanged(int32 CurrentAmmo, int32 Magazine);
 
@@ -62,6 +68,9 @@ private:
 	
 	UPROPERTY()
 	AGun* Gun;
+
+	UPROPERTY()
+	TMap<EWeaponType, AGun*> SpawnedWeapons;
 
 protected:
 

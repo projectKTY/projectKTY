@@ -130,6 +130,7 @@ void UWeaponManager::EquipWeaponByType(EWeaponType WeaponType)
 	if (SpawnedWeapons.Contains(WeaponType))
 	{
 		EquippedWeapon = SpawnedWeapons[WeaponType];
+		Gun = EquippedWeapon;
 		EquippedWeapon->SetActorHiddenInGame(false);
 
 		if (!EquippedWeapon->OnGunAmmoChangedDelegate.IsAlreadyBound(this, &UWeaponManager::NotifyAmmoChanged))

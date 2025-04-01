@@ -142,6 +142,8 @@ void APlayerCharacter::BeginPlay()
 	if (WeaponManager != nullptr)
 	{
 		WeaponManager->SetGunMesh(this, TEXT("weapon_r"));
+		// WeaponManager->InitializeWeapons(this);
+		// WeaponManager->EquipWeaponByType(EWeaponType::EWT_AssaultRifle);
 		// WeaponManager->OnAmmoChangedDelegate.AddDynamic(this, &APlayerCharacter::OnAmmoChanged);
 	}
 }

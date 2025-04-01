@@ -24,7 +24,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// 나중에 플레이어와 다른 무기 체계를 가질 수도 있기 때문에 일단은 TPSCharacter 클래스에서 상속받지 않음
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	class UWeaponManager* WeaponManager;
 };

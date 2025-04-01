@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Delegates/DelegateCombinations.h"
 #include "WeaponManager.generated.h"
 
 /**
@@ -14,7 +15,7 @@ class AGun;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedDelegate, int32, CurrentAmmo, int32, Magazine);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PROJECTKTY_API UWeaponManager : public UActorComponent
 {
 	GENERATED_BODY()
@@ -53,8 +54,9 @@ public:
 
 	UFUNCTION()
 	void EquipWeapon(ACharacter* Character, AGun* NewWeapon);
+
 	UFUNCTION()
-	void EquipWeapon(EWeaponType WeaponType);
+	void EquipWeaponByType(EWeaponType WeaponType);
 
 	UFUNCTION()
 	void NotifyAmmoChanged(int32 CurrentAmmo, int32 Magazine);

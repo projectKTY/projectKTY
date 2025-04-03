@@ -52,6 +52,24 @@ void AGun::StopFiring()
 	GetWorldTimerManager().ClearTimer(FireTimerHandle);
 }
 
+void AGun::InterruptReload()
+{
+	if (bIsReloading)
+	{
+		bIsReloading = false;
+
+		GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
+
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+		if (PlayerCharacter && ReloadMontage)
+		{
+			PlayerCharacter->GetMesh()->GetAnimInstance()->Montage_Stop(0.2f, ReloadMontage);
+		}
+
+		UE_LOG(LogTemp, Error, TEXT("Reload Interrupted Call"));
+	}
+}
+
 void AGun::PlayReloadAnimation()
 {
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
@@ -158,8 +176,6 @@ void AGun::Reload()
 	TimerDelegate.BindUFunction(this, FName("FinishReload"));
 
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, TimerDelegate, ReloadTime, false);
-
-	ResetAmmoCount();
 }
 
 void AGun::ApplyRecoil()
@@ -243,6 +259,12 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 
 void AGun::FinishReload()
 {
+	if (!bIsReloading)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Reload was Interrupted"));
+		return;
+	}
+
 	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 	CurrentAmmo = Magazine;
 	bIsReloading = false;

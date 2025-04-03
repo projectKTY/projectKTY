@@ -117,6 +117,8 @@ void UWeaponManager::EquipWeaponByType(EWeaponType WeaponType)
 {
 	if (EquippedWeapon)
 	{
+		EquippedWeapon->InterruptReload();
+
 		EquippedWeapon->OnGunAmmoChangedDelegate.RemoveDynamic(this, &UWeaponManager::NotifyAmmoChanged);
 		EquippedWeapon->SetActorHiddenInGame(true);
 

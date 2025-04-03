@@ -29,6 +29,7 @@ public:
 	void StartFiring();
 	void StopFiring();
 	
+	void InterruptReload();
 	void PlayReloadAnimation();
 
 	FOnGunAmmoChangedDelegate OnGunAmmoChangedDelegate;

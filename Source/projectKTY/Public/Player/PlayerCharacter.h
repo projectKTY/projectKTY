@@ -41,6 +41,8 @@ public:
 	UFUNCTION()
 	void SelectWeapon3();
 
+	void UIToggle();
+
 	UFUNCTION(BlueprintPure)
 	UWeaponManager* GetWeaponManager();
 

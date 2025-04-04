@@ -44,6 +44,8 @@ protected:
 	void SelectWeapon2();
 	void SelectWeapon3();
 
+	void UIToggle();
+
 private:
 
 	ATPSCharacter* Character;
@@ -84,4 +86,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SelectWeapon3Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* UIToggleAction;
 };

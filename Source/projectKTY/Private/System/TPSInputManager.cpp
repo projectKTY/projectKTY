@@ -4,6 +4,7 @@
 #include "System/TPSInputManager.h"
 #include "InputMappingContext.h"
 #include "InputActionValue.h"
+#include "ShooterPlayerController.generated.h"
 #include "Player/PlayerCharacter.h"
 
 UTPSInputManager::UTPSInputManager()
@@ -72,6 +73,12 @@ UTPSInputManager::UTPSInputManager()
 	if (IA_SELECTWEAPON_3.Succeeded())
 	{
 		SelectWeapon3Action = IA_SELECTWEAPON_3.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_UI_TOGGLE(TEXT("/Script/EnhancedInput.InputAction'/Game/ThirdPerson/Input/Actions/IA_UIToggle.IA_UIToggle'"));
+	if (IA_UI_TOGGLE.Succeeded())
+	{
+		UIToggleAction = IA_UI_TOGGLE.Object;
 	}
 }
 
@@ -168,6 +175,9 @@ void UTPSInputManager::BindInputActions(UEnhancedInputComponent* InputComponent)
 	InputComponent->BindAction(SelectWeapon1Action, ETriggerEvent::Started, this, &UTPSInputManager::SelectWeapon1);
 	InputComponent->BindAction(SelectWeapon2Action, ETriggerEvent::Started, this, &UTPSInputManager::SelectWeapon2);
 	InputComponent->BindAction(SelectWeapon3Action, ETriggerEvent::Started, this, &UTPSInputManager::SelectWeapon3);
+
+	// UI Toggle
+	InputComponent->BindAction(UIToggleAction, ETriggerEvent::Started, this, &UTPSInputManager::UIToggle);
 }
 
 void UTPSInputManager::OnMove(const FInputActionValue& Value)
@@ -299,5 +309,14 @@ void UTPSInputManager::SelectWeapon3()
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
 		PlayerCharacter->SelectWeapon3();
+	}
+}
+
+void UTPSInputManager::UIToggle()
+{
+	if (Character)
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Character);
+		PlayerCharacter->UIToggle();
 	}
 }

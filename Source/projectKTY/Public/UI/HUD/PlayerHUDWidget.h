@@ -11,6 +11,7 @@
  */
 
 class UTextBlock;
+class UButton;
 
 UCLASS()
 class PROJECTKTY_API UPlayerHUDWidget : public UUserWidget
@@ -19,6 +20,9 @@ class PROJECTKTY_API UPlayerHUDWidget : public UUserWidget
 	
 public:
 	void UpdateAmmoDisplay(int32 CurrentAmmo, int32 Magazine);
+
+	UFUNCTION()
+	void OnMoveAIButtonEvent();
 
 protected:
 	virtual void NativeConstruct() override;
@@ -32,4 +36,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Crosshair;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* AI_MoveButton;
 };

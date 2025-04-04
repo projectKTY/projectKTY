@@ -25,6 +25,8 @@ public:
 
 	void UpdateHUD(int32 CurrentAmmo, int32 Magazine);
 
+	void ToggleCursorMode();
+
 	UPlayerHUDWidget* GetHUD() const;
 
 protected:

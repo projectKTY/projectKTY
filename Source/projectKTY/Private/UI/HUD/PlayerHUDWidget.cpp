@@ -2,7 +2,12 @@
 
 
 #include "UI/HUD/PlayerHUDWidget.h"
+#include "Enemy/EnemyCharacter.h"
+#include "EngineUtils.h"
+#include "System/ShooterAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
 
 void UPlayerHUDWidget::NativeConstruct()
 {
@@ -21,6 +26,11 @@ void UPlayerHUDWidget::NativeConstruct()
 	if (AmmoWarningText)
 	{
 		AmmoWarningText->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (AI_MoveButton)
+	{
+		AI_MoveButton->OnClicked.AddDynamic(this, &UPlayerHUDWidget::OnMoveAIButtonEvent);
 	}
 }
 
@@ -51,6 +61,32 @@ void UPlayerHUDWidget::UpdateAmmoDisplay(int32 CurrentAmmo, int32 Magazine)
 			if (Crosshair->GetVisibility() == ESlateVisibility::Hidden)
 			{
 				Crosshair->SetVisibility(ESlateVisibility::Visible);
+			}
+		}
+	}
+}
+
+void UPlayerHUDWidget::OnMoveAIButtonEvent()
+{
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	for (TActorIterator<AEnemyCharacter> It(World); It; ++It)
+	{
+		AEnemyCharacter* Enemy = *It;
+		if (Enemy && Enemy->GetController())
+		{
+			AShooterAIController* AIController = Cast<AShooterAIController>(Enemy->GetController());
+			if (AIController)
+			{
+				UBlackboardComponent* BB = AIController->GetBlackboardComponent();
+				if (BB)
+				{
+					BB->SetValueAsEnum(FName("AIState"), static_cast<uint8>(EAIState::Move));
+					BB->SetValueAsVector(FName("TargetLocation"), Enemy->TargetLocation);
+
+					UE_LOG(LogTemp, Warning, TEXT("AI %s -> Move Event Called!"), *Enemy->GetName());
+				}
 			}
 		}
 	}

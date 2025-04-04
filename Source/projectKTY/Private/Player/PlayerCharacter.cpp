@@ -115,6 +115,15 @@ void APlayerCharacter::SelectWeapon3()
 	}
 }
 
+void APlayerCharacter::UIToggle()
+{
+	AShooterPlayerController* PlayerController = Cast<AShooterPlayerController>(GetController());
+	if (PlayerController)
+	{
+		PlayerController->ToggleCursorMode();
+	}
+}
+
 UWeaponManager* APlayerCharacter::GetWeaponManager()
 {
 	return WeaponManager;

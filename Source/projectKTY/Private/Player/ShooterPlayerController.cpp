@@ -61,6 +61,24 @@ void AShooterPlayerController::UpdateHUD(int32 CurrentAmmo, int32 Magazine)
 	}
 }
 
+void AShooterPlayerController::ToggleCursorMode()
+{
+	if (bShowMouseCursor)
+	{
+		FInputModeGameOnly GameInputMode;
+		SetInputMode(GameInputMode);
+		bShowMouseCursor = false;
+	}
+	else
+	{
+		FInputModeUIOnly UIInputMode;
+		UIInputMode.SetWidgetToFocus(nullptr);
+		UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		SetInputMode(UIInputMode);
+		bShowMouseCursor = true;
+	}
+}
+
 UPlayerHUDWidget* AShooterPlayerController::GetHUD() const
 {
 	return HUD;

@@ -33,32 +33,36 @@ void UBTService_UpdateAIState::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	// 2. ≈∏∞Ÿ √ﬂ√‚
-	AActor* TargetActor = Cast<AActor>(BB->GetValueAsObject(TargetActorKey.SelectedKeyName));
-
-	if (TargetActor)
+	if (BB->GetValueAsName(AIStateKey.SelectedKeyName) != FName("Move"))
 	{
-		float Distance = FVector::Dist(TargetActor->GetActorLocation(), ControlledPawn->GetActorLocation());
 
-		if (Distance <= AttackRange)
+		// 2. ≈∏∞Ÿ √ﬂ√‚
+		AActor* TargetActor = Cast<AActor>(BB->GetValueAsObject(TargetActorKey.SelectedKeyName));
+
+		if (TargetActor)
 		{
-			BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Attack"));
+			float Distance = FVector::Dist(TargetActor->GetActorLocation(), ControlledPawn->GetActorLocation());
+
+			if (Distance <= AttackRange)
+			{
+				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Attack"));
+			}
+			else
+			{
+				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Chase"));
+			}
 		}
 		else
 		{
-			BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Chase"));
-		}
-	}
-	else
-	{
-		FVector LastKnownLocation = BB->GetValueAsVector(LastKnownLocationKey.SelectedKeyName);
-		if (!LastKnownLocation.IsNearlyZero())
-		{
-			BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Retreat"));
-		}
-		else
-		{
-			BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Idle"));
+			FVector LastKnownLocation = BB->GetValueAsVector(LastKnownLocationKey.SelectedKeyName);
+			if (!LastKnownLocation.IsNearlyZero())
+			{
+				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Retreat"));
+			}
+			else
+			{
+				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Idle"));
+			}
 		}
 	}
 }

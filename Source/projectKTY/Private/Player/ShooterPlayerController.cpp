@@ -20,7 +20,7 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 
 	if (!HasAuthority())
 	{
-		HUD->RemoveFromViewport();
+		HUD->RemoveFromParent();
 		if (bIsWinner)
 		{
 			UUserWidget* WinScreen = CreateWidget(this, WinScreenClass);

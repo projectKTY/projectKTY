@@ -4,7 +4,6 @@
 #include "System/TPSInputManager.h"
 #include "InputMappingContext.h"
 #include "InputActionValue.h"
-#include "ShooterPlayerController.generated.h"
 #include "Player/PlayerCharacter.h"
 
 UTPSInputManager::UTPSInputManager()

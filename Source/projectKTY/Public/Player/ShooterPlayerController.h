@@ -5,11 +5,8 @@
 #include "CoreMinimal.h"
 #include "System/TPSInputManager.h"
 #include "GameFramework/PlayerController.h"
-#include "ShooterPlayerController.generated.h"
 
-/**
- * 
- */
+#include "ShooterPlayerController.generated.h"
 
 class UPlayerHUDWidget;
 class UTPSInputManager;

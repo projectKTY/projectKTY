@@ -13,12 +13,12 @@
 UENUM(BlueprintType)
 enum class EAIState : uint8
 {
-	Idle,
-	Move,
-	Chase,
-	Attack,
-	Retreat,
-	Dead
+	Idle UMETA(DisplayName = "Idle"),
+	Move UMETA(DisplayName = "Move"),
+	Chase UMETA(DisplayName = "Chase"),
+	Attack UMETA(DisplayName = "Attack"),
+	Retreat UMETA(DisplayName = "Retreat"),
+	Dead UMETA(DisplayName = "Dead")
 };
 
 UCLASS()

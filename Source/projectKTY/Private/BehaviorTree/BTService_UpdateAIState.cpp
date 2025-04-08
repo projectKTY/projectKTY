@@ -4,6 +4,7 @@
 #include "BehaviorTree/BTService_UpdateAIState.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "System/ShooterAIController.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
 
@@ -29,13 +30,22 @@ void UBTService_UpdateAIState::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	bool bIsDead = BB->GetValueAsBool(IsDeadKey.SelectedKeyName);
 	if (bIsDead || ControlledPawn->IsPendingKill())
 	{
-		BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Dead"));
+		BB->SetValueAsEnum(AIStateKey.SelectedKeyName, static_cast<uint8>(EAIState::Dead));
 		return;
 	}
 
-	if (BB->GetValueAsName(AIStateKey.SelectedKeyName) != FName("Move"))
+	// 2. IsMoveCommanded 체크
+	bool bMoveCommanded = BB->GetValueAsBool(TEXT("bIsMoveCommanded"));
+	if (bMoveCommanded)
 	{
+		BB->SetValueAsEnum(AIStateKey.SelectedKeyName, static_cast<uint8>(EAIState::Move));
+		// LastKnownPlayerLocation 초기화
+		BB->ClearValue(FName("LastKnownPlayerLocation"));
+		return;
+	}
 
+	if (BB->GetValueAsEnum(AIStateKey.SelectedKeyName) != static_cast<uint8>(EAIState::Move))
+	{
 		// 2. 타겟 추출
 		AActor* TargetActor = Cast<AActor>(BB->GetValueAsObject(TargetActorKey.SelectedKeyName));
 
@@ -45,11 +55,11 @@ void UBTService_UpdateAIState::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 			if (Distance <= AttackRange)
 			{
-				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Attack"));
+				BB->SetValueAsEnum(AIStateKey.SelectedKeyName, static_cast<uint8>(EAIState::Attack));
 			}
 			else
 			{
-				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Chase"));
+				BB->SetValueAsEnum(AIStateKey.SelectedKeyName, static_cast<uint8>(EAIState::Chase));
 			}
 		}
 		else
@@ -57,11 +67,11 @@ void UBTService_UpdateAIState::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 			FVector LastKnownLocation = BB->GetValueAsVector(LastKnownLocationKey.SelectedKeyName);
 			if (!LastKnownLocation.IsNearlyZero())
 			{
-				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Retreat"));
+				BB->SetValueAsEnum(AIStateKey.SelectedKeyName, static_cast<uint8>(EAIState::Retreat));
 			}
 			else
 			{
-				BB->SetValueAsName(AIStateKey.SelectedKeyName, FName("Idle"));
+				BB->SetValueAsEnum(AIStateKey.SelectedKeyName, static_cast<uint8>(EAIState::Idle));
 			}
 		}
 	}

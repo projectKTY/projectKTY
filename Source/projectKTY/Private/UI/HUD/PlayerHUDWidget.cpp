@@ -82,10 +82,12 @@ void UPlayerHUDWidget::OnMoveAIButtonEvent()
 				UBlackboardComponent* BB = AIController->GetBlackboardComponent();
 				if (BB)
 				{
+					BB->SetValueAsBool(FName("bIsMoveCommanded"), true);
 					BB->SetValueAsEnum(FName("AIState"), static_cast<uint8>(EAIState::Move));
 					BB->SetValueAsVector(FName("TargetLocation"), Enemy->TargetLocation);
 
 					UE_LOG(LogTemp, Warning, TEXT("AI %s -> Move Event Called!"), *Enemy->GetName());
+					UE_LOG(LogTemp, Warning, TEXT("TargetLocation: %s"), *Enemy->TargetLocation.ToString());
 				}
 			}
 		}

@@ -31,6 +31,12 @@ protected:
 	FBlackboardKeySelector LastKnownLocationKey;
 
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
+	FBlackboardKeySelector SpawnLocationKey;
+
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
+	FBlackboardKeySelector AttackRangeKey;
+
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
 	FBlackboardKeySelector AIStateKey;
 
 	UPROPERTY(EditAnywhere, Category = "Blackboard")

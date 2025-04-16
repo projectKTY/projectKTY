@@ -12,8 +12,10 @@ UBTTask_ClearBlackboardValue::UBTTask_ClearBlackboardValue()
 EBTNodeResult::Type UBTTask_ClearBlackboardValue::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
+	UBlackboardComponent* BB = OwnerComp.GetBlackboardComponent();
 
-	OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+	BB->ClearValue(GetSelectedBlackboardKey());
+	BB->SetValueAsVector(FName("LastKnownPlayerLocation"), FVector::ZeroVector);
 
 	return EBTNodeResult::Succeeded;
 }
